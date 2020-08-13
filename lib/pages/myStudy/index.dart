@@ -29,29 +29,32 @@ class MyStudy extends StatelessWidget {
                             borderRadius:
                                 BorderRadius.all(Radius.circular(33))),
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: <Widget>[
-                          SizedBox(
-                            height: 30,
-                            child: Text(
-                              'ClauseYi-2020-copy-right',
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              'ClauseYi-2020-copy-right放到沙发空间立刻风口浪尖的时刻了',
                               style: TextStyle(
                                 color: Color.fromRGBO(80, 80, 80, 1),
                                 fontSize: 18,
+                                height: 1.8,
                               ),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 1,
                             ),
-                          ),
-                          Text(
-                            "1997年加入，我要好好学习天天向上~",
-                            style: TextStyle(
-                              color: Color.fromRGBO(166, 166, 166, 1),
-                              fontSize: 13,
+                            Text(
+                              "1997年加入，我要好好学习天天向上~东方的风景画家奋斗史",
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: TextStyle(
+                                color: Color.fromRGBO(166, 166, 166, 1),
+                                fontSize: 13,
+                                height: 2.0,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       )
                     ],
                   ),
@@ -63,33 +66,18 @@ class MyStudy extends StatelessWidget {
                     children: <Widget>[
                       Expanded(
                         flex: 1,
-                        child: GestureDetector(
-                          child: Text(
-                            '我的订阅',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Color.fromRGBO(80, 80, 80, 1),
+                        child: InkWell(
+                          child: Center(
+                            child: Text(
+                              '我的订阅',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Color.fromRGBO(80, 80, 80, 1),
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                      Container(
-                        width: 1,
-                        height: 22,
-                        color: _bgColor,
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: GestureDetector(
-                          child: Text(
-                            '我的收藏',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Color.fromRGBO(80, 80, 80, 1),
-                            ),
-                          ),
+                          onTap: () => {print('我的订阅')},
                         ),
                       ),
                       Container(
@@ -100,15 +88,38 @@ class MyStudy extends StatelessWidget {
                       Expanded(
                         flex: 1,
                         child: InkWell(
-                          onTap: () => {print('object')},
-                          child: Text(
-                            '我的下载',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Color.fromRGBO(80, 80, 80, 1),
+                          child: Center(
+                            child: Text(
+                              '我的收藏',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Color.fromRGBO(80, 80, 80, 1),
+                              ),
                             ),
                           ),
+                          onTap: () => {print('我的订阅')},
+                        ),
+                      ),
+                      Container(
+                        width: 1,
+                        height: 22,
+                        color: _bgColor,
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: InkWell(
+                          child: Center(
+                            child: Text(
+                              '我的下载',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Color.fromRGBO(80, 80, 80, 1),
+                              ),
+                            ),
+                          ),
+                          onTap: () => {print('我的下载')},
                         ),
                       ),
                     ],

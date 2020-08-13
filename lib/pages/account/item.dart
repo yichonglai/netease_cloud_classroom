@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+
 class Item extends StatelessWidget {
   Item({Key key, this.title, this.icon, this.onTab, this.underline = false})
       : super(key: key);
@@ -10,11 +11,11 @@ class Item extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SliverToBoxAdapter(
-      child: Container(
-        color: Colors.white,
-        padding: EdgeInsets.fromLTRB(12, 11, 9, 0),
-        child: GestureDetector(
-          behavior: HitTestBehavior.translucent,
+      child: InkWell(
+        onTap: onTab,
+        child: Container(
+          color: Colors.white,
+          padding: EdgeInsets.fromLTRB(12, 11, 9, 0),
           child: Column(
             children: <Widget>[
               Padding(
@@ -50,7 +51,6 @@ class Item extends StatelessWidget {
               ),
             ],
           ),
-          onTap: onTab,
         ),
       ),
     );
