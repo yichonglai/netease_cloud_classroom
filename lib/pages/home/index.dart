@@ -1,32 +1,64 @@
 import 'package:flutter/material.dart';
-import 'package:netease_cloud_classroom/widgets/static_search_widget.dart';
+import '../../widgets/static_search_widget.dart';
+import '../../util/screen_utils.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
+  TabController _tabController;
+  List tabs = ["个性推荐", "课堂", "微专业"];
+  @override
+  void initState() {
+    _tabController = TabController(length: tabs.length, vsync: this);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3,
-      initialIndex: 1,
+      length: tabs.length,
       child: Scaffold(
-        appBar: TabBar(
-          indicatorWeight: 2.0,
-          indicatorSize: TabBarIndicatorSize.label,
-          indicatorColor: Color.fromRGBO(51, 177, 123, 1),
-          labelColor: Color.fromRGBO(51, 177, 123, 1),
-          labelStyle: TextStyle(fontSize: 14),
-          unselectedLabelColor: Color.fromRGBO(80, 80, 80, 1),
-          tabs: <Widget>[
-            Tab(text: '个性推荐'),
-            Tab(text: '课堂'),
-            Tab(text: '微专业'),
-          ],
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(90),
+          child: Container(
+            color: Theme.of(context).primaryColor,
+            child: SafeArea(
+              child: Column(
+                children: <Widget>[
+                  Expanded(child: SizedBox()),
+                  StaticSearchWidget(
+                    hintText: '网易云课堂',
+                    margin: EdgeInsets.fromLTRB(
+                        14, 0, 14, 0),
+                    onTab: () => {print('搜索')},
+                  ),
+                  TabBar(
+                    indicatorWeight: 2.0,
+                    indicatorSize: TabBarIndicatorSize.label,
+                    indicatorColor: Color.fromRGBO(51, 177, 123, 1),
+                    labelColor: Color.fromRGBO(51, 177, 123, 1),
+                    labelStyle: TextStyle(fontSize: 14),
+                    unselectedLabelColor: Color.fromRGBO(80, 80, 80, 1),
+                    tabs: tabs.map((t) {
+                      return Tab(
+                        child: Text(t),
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
         body: TabBarView(
-          children: <Widget>[
-            Text('个性推荐'),
-            Text('课堂'),
-            Text('微专业'),
-          ],
+          children: tabs.map((t) {
+            return Center(
+              child: Text(t),
+            );
+          }).toList(),
         ),
       ),
     );
