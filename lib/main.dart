@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './my_icons.dart';
+import './utils/color_extension.dart';
 
 void main() {
   runApp(MyApp());
@@ -63,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(MyIcons.calender),
+            Icon(MyIcons.calender, color: Colors.blue,),
             Text(
               'You have pushed the button this many times:',
             ),
