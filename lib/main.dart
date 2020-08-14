@@ -1,8 +1,8 @@
 import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
-import 'package:netease_cloud_classroom/widgets/restart_widget.dart';
-import 'package:netease_cloud_classroom/pages/splash/index.dart';
+import './widgets/restart_widget.dart';
+import './pages/splash/index.dart';
 
 void main() {
   runApp(MyApp());

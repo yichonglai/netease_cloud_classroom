@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../widgets/static_search_widget.dart';
 import '../../util/screen_utils.dart';
@@ -8,17 +9,12 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
-  TabController _tabController;
-  List tabs = ["个性推荐", "课堂", "微专业"];
-  @override
-  void initState() {
-    _tabController = TabController(length: tabs.length, vsync: this);
-    super.initState();
-  }
+  final List tabs = const ["个性推荐", "课堂", "微专业"];
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
+      initialIndex: 1,
       length: tabs.length,
       child: Scaffold(
         appBar: PreferredSize(

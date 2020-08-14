@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:netease_cloud_classroom/widgets/static_search_widget.dart';
 import '../../constant/index.dart';
 
 class MyStudy extends StatelessWidget {
