@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../widgets/static_search_widget.dart';
-import '../../util/screen_utils.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -14,7 +12,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      initialIndex: 1,
+      initialIndex: 0,
       length: tabs.length,
       child: Scaffold(
         appBar: PreferredSize(
