@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../widgets/static_search_widget.dart';
+import './individual/index.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -15,6 +16,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
       initialIndex: 0,
       length: tabs.length,
       child: Scaffold(
+        backgroundColor: Color.fromRGBO(236, 238, 241, 1),
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(90),
           child: Container(
@@ -48,11 +50,11 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           ),
         ),
         body: TabBarView(
-          children: tabs.map((t) {
-            return Center(
-              child: Text(t),
-            );
-          }).toList(),
+          children: <Widget>[
+            Individual(),
+            Text('11'),
+            Text('222'),
+          ],
         ),
       ),
     );
