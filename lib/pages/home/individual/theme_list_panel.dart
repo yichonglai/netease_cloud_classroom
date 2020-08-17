@@ -103,6 +103,7 @@ class ThemeListPanel extends StatelessWidget {
                       Image.asset(
                         Constant.ASSETS_IMG + 'temp/post${data[idx].image}.jpg',
                         height: 74,
+                        fit: BoxFit.cover,
                       ),
                       SizedBox(
                         height: 5,
