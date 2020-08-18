@@ -3,6 +3,7 @@ import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:dio/dio.dart';
 import 'package:netease_cloud_classroom/pages/home/course/type.dart';
 import './type.dart';
+import './course_panel.dart';
 
 class Course extends StatefulWidget {
   @override
@@ -27,14 +28,13 @@ class _CourseState extends State<Course> {
 
   @override
   void initState() {
-    // TODO: implement initState
     fetchData();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    if (data != null) {
+    if (data != null && data.result != null) {
       return CustomScrollView(
         slivers: <Widget>[
           SliverToBoxAdapter(
@@ -44,6 +44,13 @@ class _CourseState extends State<Course> {
                 itemHeight: 137,
                 itemCount: data.result.focusDtoList.length,
                 autoplay: true,
+                pagination: SwiperPagination(
+                  builder: DotSwiperPaginationBuilder(
+                    color: Color.fromRGBO(200, 200, 200, 0.5),
+                    size: 6.0,
+                    activeSize: 8.0,
+                  ),
+                ),
                 itemBuilder: (BuildContext context, int idx) {
                   return Image.network(
                     data.result.focusDtoList[idx].photoUrl,
@@ -57,9 +64,10 @@ class _CourseState extends State<Course> {
           SliverToBoxAdapter(
             child: Container(
               color: Colors.white,
-              height: 250,
+              height: 160,
               padding: EdgeInsets.symmetric(vertical: 15, horizontal: 9),
               child: GridView.count(
+                physics: NeverScrollableScrollPhysics(),
                 crossAxisCount: 4,
                 childAspectRatio: 1.4,
                 mainAxisSpacing: 5.0,
@@ -69,8 +77,8 @@ class _CourseState extends State<Course> {
                             children: <Widget>[
                               Image.network(
                                 item.photoUrl,
-                                width: 37,
-                                height: 37,
+                                width: 37.98,
+                                height: 37.98,
                               ),
                               SizedBox(
                                 height: 3,
@@ -78,8 +86,8 @@ class _CourseState extends State<Course> {
                               Text(
                                 item.name,
                                 style: TextStyle(
-                                  fontSize: 12,
-                                ),
+                                    fontSize: 12,
+                                    color: Color.fromRGBO(0, 0, 0, 1)),
                               ),
                             ],
                           ))
@@ -87,11 +95,16 @@ class _CourseState extends State<Course> {
                 ],
               ),
             ),
-          )
+          ),
+          ...data.result.sectionDtoList
+              .map((item) => CoursePanel(
+                    title: item.sectionName,
+                    child: Text('222'),
+                  ))
+              .toList(),
         ],
       );
-    } else {
-      return Text('loading...');
     }
+    return Center(child: CircularProgressIndicator());
   }
 }
