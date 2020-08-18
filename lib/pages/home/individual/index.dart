@@ -12,11 +12,13 @@ class Individual extends StatefulWidget {
 class _IndividualState extends State<Individual> {
   @override
   Widget build(BuildContext context) {
-    return ListView(children: <Widget>[
-      HotPanel(),
-      ListPanel(),
-      ThemeListPanel(),
-      ThemeSinglePanel(),
-    ],);
+    return ListView(
+      children: <Widget>[
+        HotPanel(),
+        ListPanel(),
+        ThemeListPanel(),
+        ThemeSinglePanel(),
+      ],
+    );
   }
 }

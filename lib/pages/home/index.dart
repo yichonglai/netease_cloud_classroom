@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../widgets/static_search_widget.dart';
 import './individual/index.dart';
+import './course/index.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -52,7 +53,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
         body: TabBarView(
           children: <Widget>[
             Individual(),
-            Text('11'),
+            Course(),
             Text('222'),
           ],
         ),
