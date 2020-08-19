@@ -31,6 +31,8 @@ dependencies:
   smooth_star_rating: ^1.1.1
   flutter_swiper: ^1.1.6
   dio: ^3.0.10
+  transparent_image: ^1.0.0
+  webview_flutter: ^0.3.22+1
 
 dev_dependencies:
   flutter_test:

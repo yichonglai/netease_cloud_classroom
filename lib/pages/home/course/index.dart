@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:dio/dio.dart';
 import 'package:netease_cloud_classroom/pages/home/course/type.dart';
+import 'package:transparent_image/transparent_image.dart';
 import './type.dart';
 import './course_panel.dart';
+import './course_list.dart';
+import 'package:netease_cloud_classroom/pages/browser/index.dart';
 
 class Course extends StatefulWidget {
   @override
@@ -52,10 +55,23 @@ class _CourseState extends State<Course> {
                   ),
                 ),
                 itemBuilder: (BuildContext context, int idx) {
-                  return Image.network(
-                    data.result.focusDtoList[idx].photoUrl,
-                    height: 137,
-                    fit: BoxFit.cover,
+                  return InkWell(
+                    onTap: () {
+//                      print(data.result.focusDtoList[idx].targetTo);
+                      Navigator.of(context)
+                          .push(new MaterialPageRoute(builder: (_) {
+                        return new Browser(
+                          url: data.result.focusDtoList[idx].targetTo,
+                          title: data.result.focusDtoList[idx].name,
+                        );
+                      }));
+                    },
+                    child: FadeInImage.memoryNetwork(
+                      placeholder: kTransparentImage,
+                      image: data.result.focusDtoList[idx].photoUrl,
+                      height: 137,
+                      fit: BoxFit.cover,
+                    ),
                   );
                 },
               ),
@@ -64,10 +80,10 @@ class _CourseState extends State<Course> {
           SliverToBoxAdapter(
             child: Container(
               color: Colors.white,
-              height: 160,
               padding: EdgeInsets.symmetric(vertical: 15, horizontal: 9),
               child: GridView.count(
                 physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
                 crossAxisCount: 4,
                 childAspectRatio: 1.4,
                 mainAxisSpacing: 5.0,
@@ -75,8 +91,9 @@ class _CourseState extends State<Course> {
                   ...data.result.iconDtoList
                       .map((item) => Column(
                             children: <Widget>[
-                              Image.network(
-                                item.photoUrl,
+                              FadeInImage.memoryNetwork(
+                                placeholder: kTransparentImage,
+                                image: item.photoUrl,
                                 width: 37.98,
                                 height: 37.98,
                               ),
@@ -99,7 +116,10 @@ class _CourseState extends State<Course> {
           ...data.result.sectionDtoList
               .map((item) => CoursePanel(
                     title: item.sectionName,
-                    child: Text('222'),
+                    child: CourseList(
+                      listType: item.sectionTemplate,
+                      data: item.elementDtoList,
+                    ),
                   ))
               .toList(),
         ],

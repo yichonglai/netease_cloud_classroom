@@ -28,9 +28,8 @@ class CoursePanel extends StatelessWidget {
                 ),
               ),
             ),
-//            Wrap(
-//              children: <Widget>[],
-//            ),
+            SizedBox(height: 10,),
+            child,
           ],
         ),
       ),
