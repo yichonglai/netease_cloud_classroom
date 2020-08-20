@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../widgets/static_search_widget.dart';
 import './individual/index.dart';
 import './course/index.dart';
+import './micro_specialty/index.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -54,7 +55,7 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
           children: <Widget>[
             Individual(),
             Course(),
-            Text('222'),
+            MicroSpecialty(),
           ],
         ),
       ),

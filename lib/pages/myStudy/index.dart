@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../constant/index.dart';
+import 'package:netease_cloud_classroom/widgets/text_line_height.dart';
 
 class MyStudy extends StatelessWidget {
   final Color _bgColor = Color.fromRGBO(153, 153, 153, 0.1);
@@ -134,7 +136,13 @@ class MyStudy extends StatelessWidget {
             ),
           ),
           SliverToBoxAdapter(
-            child: Text('111'),
+            child: Container(
+              color: Colors.red,
+              child: TextLineHeight(
+              '附近的反倒是加分的考生拉法基第三方接口家里多大合适的数据库的空间的撒大苏打的尽快发大厦是对方可怜见可'
+                '怜见范德萨发你的犯得上看见风口浪尖',
+              ),
+            ),
           ),
         ],
       ),
