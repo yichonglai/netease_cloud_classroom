@@ -33,6 +33,7 @@ dependencies:
   dio: ^3.0.10
   transparent_image: ^1.0.0
   webview_flutter: ^0.3.22+1
+  video_player: ^0.10.12
 
 dev_dependencies:
   flutter_test:

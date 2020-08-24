@@ -28,92 +28,97 @@ class CourseList extends StatelessWidget {
         ],
       );
     } else if (listType == 'A_BB_BB') {
-//      return Wrap(
-//        crossAxisAlignment: WrapCrossAlignment.center,
-//        children: <Widget>[
-//          ...data
-//              .map(
-//                (item) => FractionallySizedBox(
-//                  widthFactor: data[0].name == item.name ? 1 : 0.45,
-//                  child: Image.network(
-//                    item.photoUrl,
-//                    height: 94,
-//                    fit: BoxFit.cover,
-//                  ),
-////                  child: Column(
-////                    crossAxisAlignment: CrossAxisAlignment.stretch,
-////                    children: <Widget>[
-////                      Image.network(
-////                        item.photoUrl,
-////                        height: 94,
-////                        fit: BoxFit.cover,
-////                      ),
-//////              SizedBox(
-//////                height: 5,
-//////              ),
-//////              Expanded(
-//////                child: Text(
-//////                  item.name,
-//////                  style: TextStyle(
-//////                    color: Color.fromRGBO(80, 80, 80, 1),
-//////                    fontSize: 13,
-//////                    height: 1.5,
-//////                  ),
-//////                  overflow: TextOverflow.ellipsis,
-//////                  maxLines: 2,
-//////                ),
-//////              ),
-//////              Row(
-//////                children: <Widget>[
-//////                  SmoothStarRating(
-//////                      allowHalfRating: true,
-//////                      starCount: 5,
-//////                      rating: 3.5,
-//////                      size: 11.0,
-//////                      isReadOnly: true,
-//////                      filledIconData: Icons.star,
-//////                      halfFilledIconData: Icons.star_half,
-//////                      color: Color.fromRGBO(51, 177, 123, 1),
-//////                      borderColor: Color.fromRGBO(51, 177, 123, 1),
-//////                      spacing: 0.0),
-//////                  Text(
-//////                    '${item.weight}',
-//////                    style: TextStyle(
-//////                      color: Color.fromRGBO(80, 80, 80, 1),
-//////                      fontSize: 11,
-//////                    ),
-//////                  ),
-//////                  Expanded(
-//////                      child: Text(
-//////                        '666人学过',
-//////                        style: TextStyle(
-//////                          color: Color.fromRGBO(80, 80, 80, 1),
-//////                          fontSize: 11,
-//////                        ),
-//////                        textAlign: TextAlign.right,
-//////                      )),
-//////                ],
-//////              ),
-//////              SizedBox(
-//////                height: 5,
-//////              ),
-//////              Text(
-//////                item.courseCardVo != null ? '¥ ${item.courseCardVo.yktCourseCardv.price}' : '免费',
-//////                style: TextStyle(
-//////                  fontSize: 13,
-//////                  color: item.courseCardVo != null
-//////                      ? Color.fromRGBO(238, 104, 72, 1)
-//////                      : Color.fromRGBO(51, 177, 123, 1),
-//////                  height: 1.5,
-//////                ),
-//////              ),
-////                    ],
-////                  ),
-//                ),
-//              )
-//              .toList(),
-//        ],
-//      );
+      return Wrap(
+        alignment: WrapAlignment.spaceBetween,
+        children: <Widget>[
+          ...data
+              .map(
+                (item) => FractionallySizedBox(
+                  widthFactor: data[0].name == item.name ? 1 : 0.49,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      SizedBox(
+                        height: data[0].name == item.name ? 0 : 10,
+                      ),
+                      data[0].name == item.name
+                          ? FadeInImage.memoryNetwork(
+                              placeholder: kTransparentImage,
+                              image: item.photoUrl,
+                              fit: BoxFit.fitWidth,
+                            )
+                          : FadeInImage.memoryNetwork(
+                              placeholder: kTransparentImage,
+                              image: item.photoUrl,
+                              height: 94,
+                              fit: BoxFit.fitWidth,
+                            ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        item.name,
+                        style: TextStyle(
+                          color: Color.fromRGBO(80, 80, 80, 1),
+                          fontSize: 13,
+                          height: 1.5,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                      ),
+                      Row(
+                        children: <Widget>[
+                          SmoothStarRating(
+                              allowHalfRating: true,
+                              starCount: 5,
+                              rating: 3 * item.weight / 3,
+                              size: 11.0,
+                              isReadOnly: true,
+                              filledIconData: Icons.star,
+                              halfFilledIconData: Icons.star_half,
+                              color: Color.fromRGBO(51, 177, 123, 1),
+                              borderColor: Color.fromRGBO(51, 177, 123, 1),
+                              spacing: 0.0),
+                          Text(
+                            '${item.weight}',
+                            style: TextStyle(
+                              color: Color.fromRGBO(80, 80, 80, 1),
+                              fontSize: 11,
+                            ),
+                          ),
+                          Expanded(
+                              child: Text(
+                            '666人学过',
+                            style: TextStyle(
+                              color: Color.fromRGBO(80, 80, 80, 1),
+                              fontSize: 11,
+                            ),
+                            textAlign: TextAlign.right,
+                          )),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        item.courseCardVo != null
+                            ? '¥ ${item.courseCardVo.yktCourseCardv.price}'
+                            : '免费',
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: item.courseCardVo != null
+                              ? Color.fromRGBO(238, 104, 72, 1)
+                              : Color.fromRGBO(51, 177, 123, 1),
+                          height: 1.5,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+              .toList(),
+        ],
+      );
     }
     return GridView.builder(
       shrinkWrap: true,
@@ -155,7 +160,7 @@ class CourseList extends StatelessWidget {
                 SmoothStarRating(
                     allowHalfRating: true,
                     starCount: 5,
-                    rating: 3.5,
+                    rating: 3 * data[idx].weight / 3,
                     size: 11.0,
                     isReadOnly: true,
                     filledIconData: Icons.star,

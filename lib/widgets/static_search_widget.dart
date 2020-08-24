@@ -25,6 +25,7 @@ class StaticSearchWidget extends StatelessWidget {
         onTap: onTab,
         cursorColor: Color.fromARGB(255, 80, 80, 80),
         decoration: InputDecoration(
+          contentPadding: EdgeInsets.only(bottom: -3, right: 15),
           border: InputBorder.none,
           hintText: hintText,
           hintStyle: TextStyle(
