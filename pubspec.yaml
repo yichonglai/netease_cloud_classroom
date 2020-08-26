@@ -34,6 +34,8 @@ dependencies:
   transparent_image: ^1.0.0
   webview_flutter: ^0.3.22+1
   video_player: ^0.10.12
+  wakelock: ^0.1.4+2
+  open_iconic_flutter: ^0.3.0
 
 dev_dependencies:
   flutter_test:
