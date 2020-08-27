@@ -6,14 +6,14 @@ import 'package:video_player/video_player.dart';
 class CupertinoVideoProgressBar extends StatefulWidget {
   CupertinoVideoProgressBar(
     this.controller, {
-    VideosPlayerProgressColors colors,
+    YepProgressColors colors,
     this.onDragEnd,
     this.onDragStart,
     this.onDragUpdate,
-  }) : colors = colors ?? VideosPlayerProgressColors();
+  }) : colors = colors ?? YepProgressColors();
 
   final VideoPlayerController controller;
-  final VideosPlayerProgressColors colors;
+  final YepProgressColors colors;
   final Function() onDragStart;
   final Function() onDragEnd;
   final Function() onDragUpdate;
@@ -118,7 +118,7 @@ class _ProgressBarPainter extends CustomPainter {
   _ProgressBarPainter(this.value, this.colors);
 
   VideoPlayerValue value;
-  VideosPlayerProgressColors colors;
+  YepProgressColors colors;
 
   @override
   bool shouldRepaint(CustomPainter painter) {

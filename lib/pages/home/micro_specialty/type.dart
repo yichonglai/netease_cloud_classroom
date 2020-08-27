@@ -1,7 +1,8 @@
 class ExampleType {
-  ExampleType({this.title, this.image});
-  final String image;
+  ExampleType({this.title, this.poster, this.url});
+  final String poster;
   final String title;
+  final String url;
 }
 
 class TutorType {

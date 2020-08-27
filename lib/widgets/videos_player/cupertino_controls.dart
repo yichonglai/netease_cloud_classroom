@@ -36,17 +36,17 @@ class _CupertinoControlsState extends State<CupertinoControls> {
   Timer _initTimer;
 
   VideoPlayerController controller;
-  VideosPlayerController chewieController;
+  YepController yepController;
 
   @override
   Widget build(BuildContext context) {
-    chewieController = VideosPlayerController.of(context);
+    yepController = YepController.of(context);
 
     if (_latestValue.hasError) {
-      return chewieController.errorBuilder != null
-          ? chewieController.errorBuilder(
+      return yepController.errorBuilder != null
+          ? yepController.errorBuilder(
               context,
-              chewieController.videoPlayerController.value.errorDescription,
+              yepController.videoPlayerController.value.errorDescription,
             )
           : Center(
               child: Icon(
@@ -59,8 +59,8 @@ class _CupertinoControlsState extends State<CupertinoControls> {
 
     final backgroundColor = widget.backgroundColor;
     final iconColor = widget.iconColor;
-    chewieController = VideosPlayerController.of(context);
-    controller = chewieController.videoPlayerController;
+    yepController = YepController.of(context);
+    controller = yepController.videoPlayerController;
     final orientation = MediaQuery.of(context).orientation;
     final barHeight = orientation == Orientation.portrait ? 30.0 : 47.0;
     final buttonPadding = orientation == Orientation.portrait ? 16.0 : 24.0;
@@ -103,11 +103,11 @@ class _CupertinoControlsState extends State<CupertinoControls> {
 
   @override
   void didChangeDependencies() {
-    final _oldController = chewieController;
-    chewieController = VideosPlayerController.of(context);
-    controller = chewieController.videoPlayerController;
+    final _oldController = yepController;
+    yepController = YepController.of(context);
+    controller = yepController.videoPlayerController;
 
-    if (_oldController != chewieController) {
+    if (_oldController != yepController) {
       _dispose();
       _initialize();
     }
@@ -137,7 +137,7 @@ class _CupertinoControlsState extends State<CupertinoControls> {
             child: Container(
               height: barHeight,
               color: backgroundColor,
-              child: chewieController.isLive
+              child: yepController.isLive
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
@@ -196,7 +196,7 @@ class _CupertinoControlsState extends State<CupertinoControls> {
               color: backgroundColor,
               child: Center(
                 child: Icon(
-                  chewieController.isFullScreen
+                  yepController.isFullScreen
                       ? OpenIconicIcons.fullscreenExit
                       : OpenIconicIcons.fullscreenEnter,
                   color: iconColor,
@@ -395,12 +395,12 @@ class _CupertinoControlsState extends State<CupertinoControls> {
       ),
       child: Row(
         children: <Widget>[
-          chewieController.allowFullScreen
+          yepController.allowFullScreen
               ? _buildExpandButton(
                   backgroundColor, iconColor, barHeight, buttonPadding)
               : Container(),
           Expanded(child: Container()),
-          chewieController.allowMuting
+          yepController.allowMuting
               ? _buildMuteButton(controller, backgroundColor, iconColor,
                   barHeight, buttonPadding)
               : Container(),
@@ -425,11 +425,11 @@ class _CupertinoControlsState extends State<CupertinoControls> {
     _updateState();
 
     if ((controller.value != null && controller.value.isPlaying) ||
-        chewieController.autoPlay) {
+        yepController.autoPlay) {
       _startHideTimer();
     }
 
-    if (chewieController.showControlsOnInitialize) {
+    if (yepController.showControlsOnInitialize) {
       _initTimer = Timer(Duration(milliseconds: 200), () {
         setState(() {
           _hideStuff = false;
@@ -442,7 +442,7 @@ class _CupertinoControlsState extends State<CupertinoControls> {
     setState(() {
       _hideStuff = true;
 
-      chewieController.toggleFullScreen();
+      yepController.toggleFullScreen();
       _expandCollapseTimer = Timer(Duration(milliseconds: 300), () {
         setState(() {
           _cancelAndRestartTimer();
@@ -463,8 +463,8 @@ class _CupertinoControlsState extends State<CupertinoControls> {
           onDragEnd: () {
             _startHideTimer();
           },
-          colors: chewieController.cupertinoProgressColors ??
-              VideosPlayerProgressColors(
+          colors: yepController.cupertinoProgressColors ??
+              YepProgressColors(
                 playedColor: Color.fromARGB(
                   120,
                   255,

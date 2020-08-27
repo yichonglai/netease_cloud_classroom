@@ -8,39 +8,40 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 class PlayerWithControls extends StatelessWidget {
-  PlayerWithControls({Key key}) : super(key: key);
+  PlayerWithControls({Key key, this.title = '',}) : super(key: key);
+  final String title;
 
   @override
   Widget build(BuildContext context) {
-    final VideosPlayerController chewieController = VideosPlayerController.of(context);
+    final YepController yepController = YepController.of(context);
 
     return Center(
       child: Container(
         width: MediaQuery.of(context).size.width,
         child: AspectRatio(
           aspectRatio:
-              chewieController.aspectRatio ?? _calculateAspectRatio(context),
-          child: _buildPlayerWithControls(chewieController, context),
+              yepController.aspectRatio ?? _calculateAspectRatio(context),
+          child: _buildPlayerWithControls(yepController, context),
         ),
       ),
     );
   }
 
   Container _buildPlayerWithControls(
-      VideosPlayerController chewieController, BuildContext context) {
+      YepController yepController, BuildContext context) {
     return Container(
       child: Stack(
         children: <Widget>[
-          chewieController.placeholder ?? Container(),
+          yepController.placeholder ?? Container(),
           Center(
             child: AspectRatio(
-              aspectRatio: chewieController.aspectRatio ??
+              aspectRatio: yepController.aspectRatio ??
                   _calculateAspectRatio(context),
-              child: VideoPlayer(chewieController.videoPlayerController),
+              child: VideoPlayer(yepController.videoPlayerController),
             ),
           ),
-          chewieController.overlay ?? Container(),
-          _buildControls(context, chewieController),
+          yepController.overlay ?? Container(),
+          _buildControls(context, yepController),
         ],
       ),
     );
@@ -48,13 +49,13 @@ class PlayerWithControls extends StatelessWidget {
 
   Widget _buildControls(
     BuildContext context,
-    VideosPlayerController chewieController,
+    YepController yepController,
   ) {
-    return chewieController.showControls
-        ? chewieController.customControls != null
-            ? chewieController.customControls
+    return yepController.showControls
+        ? yepController.customControls != null
+            ? yepController.customControls
             : Theme.of(context).platform == TargetPlatform.android
-                ? MaterialControls()
+                ? MaterialControls(title: title,)
                 : CupertinoControls(
                     backgroundColor: Color.fromRGBO(41, 41, 41, 0.7),
                     iconColor: Color.fromARGB(255, 200, 200, 200),

@@ -8,33 +8,33 @@ import 'package:flutter/widgets.dart';
 import 'package:video_player/video_player.dart';
 import 'package:wakelock/wakelock.dart';
 
-typedef Widget VideosPlayerRoutePageBuilder(
+typedef Widget YepRoutePageBuilder(
     BuildContext context,
     Animation<double> animation,
     Animation<double> secondaryAnimation,
-    _VideosPlayerControllerProvider controllerProvider);
+    _YepControllerProvider controllerProvider);
 
 /// A Video Player with Material and Cupertino skins.
 ///
-/// `video_player` is pretty low level. VideosPlayer wraps it in a friendly skin to
+/// `video_player` is pretty low level. Yep wraps it in a friendly skin to
 /// make it easy to use!
-class VideosPlayer extends StatefulWidget {
-  VideosPlayer({
+class Yep extends StatefulWidget {
+  Yep({
     Key key,
     this.controller,
-  })  : assert(controller != null, 'You must provide a chewie controller'),
+    this.title = '',
+  })  : assert(controller != null, 'You must provide a yep controller'),
         super(key: key);
 
-  /// The [VideosPlayerController]
-  final VideosPlayerController controller;
+  /// The [YepController]
+  final YepController controller;
+  final String title;
 
   @override
-  VideosPlayerState createState() {
-    return VideosPlayerState();
-  }
+  _YepState createState() => _YepState();
 }
 
-class VideosPlayerState extends State<VideosPlayer> {
+class _YepState extends State<Yep> {
   bool _isFullScreen = false;
 
   @override
@@ -50,7 +50,7 @@ class VideosPlayerState extends State<VideosPlayer> {
   }
 
   @override
-  void didUpdateWidget(VideosPlayer oldWidget) {
+  void didUpdateWidget(Yep oldWidget) {
     if (oldWidget.controller != widget.controller) {
       widget.controller.addListener(listener);
     }
@@ -69,16 +69,16 @@ class VideosPlayerState extends State<VideosPlayer> {
 
   @override
   Widget build(BuildContext context) {
-    return _VideosPlayerControllerProvider(
+    return _YepControllerProvider(
       controller: widget.controller,
-      child: PlayerWithControls(),
+      child: PlayerWithControls(title: widget.title,),
     );
   }
 
   Widget _buildFullScreenVideo(
       BuildContext context,
       Animation<double> animation,
-      _VideosPlayerControllerProvider controllerProvider) {
+      _YepControllerProvider controllerProvider) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: Container(
@@ -93,7 +93,7 @@ class VideosPlayerState extends State<VideosPlayer> {
       BuildContext context,
       Animation<double> animation,
       Animation<double> secondaryAnimation,
-      _VideosPlayerControllerProvider controllerProvider) {
+      _YepControllerProvider controllerProvider) {
     return AnimatedBuilder(
       animation: animation,
       builder: (BuildContext context, Widget child) {
@@ -107,7 +107,7 @@ class VideosPlayerState extends State<VideosPlayer> {
     Animation<double> animation,
     Animation<double> secondaryAnimation,
   ) {
-    var controllerProvider = _VideosPlayerControllerProvider(
+    var controllerProvider = _YepControllerProvider(
       controller: widget.controller,
       child: PlayerWithControls(),
     );
@@ -153,18 +153,18 @@ class VideosPlayerState extends State<VideosPlayer> {
   }
 }
 
-/// The VideosPlayerController is used to configure and drive the VideosPlayer Player
+/// The YepController is used to configure and drive the Yep Player
 /// Widgets. It provides methods to control playback, such as [pause] and
 /// [play], as well as methods that control the visual appearance of the player,
 /// such as [enterFullScreen] or [exitFullScreen].
 ///
-/// In addition, you can listen to the VideosPlayerController for presentational
+/// In addition, you can listen to the YepController for presentational
 /// changes, such as entering and exiting full screen mode. To listen for
 /// changes to the playback, such as a change to the seek position of the
 /// player, please use the standard information provided by the
 /// `VideoPlayerController`.
-class VideosPlayerController extends ChangeNotifier {
-  VideosPlayerController({
+class YepController extends ChangeNotifier {
+  YepController({
     this.videoPlayerController,
     this.aspectRatio,
     this.autoInitialize = false,
@@ -234,11 +234,11 @@ class VideosPlayerController extends ChangeNotifier {
 
   /// The colors to use for controls on iOS. By default, the iOS player uses
   /// colors sampled from the original iOS 11 designs.
-  final VideosPlayerProgressColors cupertinoProgressColors;
+  final YepProgressColors cupertinoProgressColors;
 
   /// The colors to use for the Material Progress Bar. By default, the Material
   /// player uses the colors from your Theme.
-  final VideosPlayerProgressColors materialProgressColors;
+  final YepProgressColors materialProgressColors;
 
   /// The placeholder is displayed underneath the Video before it is initialized
   /// or played.
@@ -269,12 +269,12 @@ class VideosPlayerController extends ChangeNotifier {
   final List<DeviceOrientation> deviceOrientationsAfterFullScreen;
 
   /// Defines a custom RoutePageBuilder for the fullscreen
-  final VideosPlayerRoutePageBuilder routePageBuilder;
+  final YepRoutePageBuilder routePageBuilder;
 
-  static VideosPlayerController of(BuildContext context) {
+  static YepController of(BuildContext context) {
     final chewieControllerProvider =
-        context.inheritFromWidgetOfExactType(_VideosPlayerControllerProvider)
-            as _VideosPlayerControllerProvider;
+        context.inheritFromWidgetOfExactType(_YepControllerProvider)
+            as _YepControllerProvider;
 
     return chewieControllerProvider.controller;
   }
@@ -351,8 +351,8 @@ class VideosPlayerController extends ChangeNotifier {
   }
 }
 
-class _VideosPlayerControllerProvider extends InheritedWidget {
-  const _VideosPlayerControllerProvider({
+class _YepControllerProvider extends InheritedWidget {
+  const _YepControllerProvider({
     Key key,
     @required this.controller,
     @required Widget child,
@@ -360,9 +360,9 @@ class _VideosPlayerControllerProvider extends InheritedWidget {
         assert(child != null),
         super(key: key, child: child);
 
-  final VideosPlayerController controller;
+  final YepController controller;
 
   @override
-  bool updateShouldNotify(_VideosPlayerControllerProvider old) =>
+  bool updateShouldNotify(_YepControllerProvider old) =>
       controller != old.controller;
 }

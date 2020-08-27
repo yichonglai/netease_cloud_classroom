@@ -7,13 +7,14 @@ import './utils.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-class MaterialControls extends StatefulWidget {
-  const MaterialControls({Key key}) : super(key: key);
+const lightColor = Color.fromRGBO(255, 255, 255, 0.85);
+const darkColor = Color.fromRGBO(1, 1, 1, 0.35);
 
+class MaterialControls extends StatefulWidget {
+  const MaterialControls({Key key, @required this.title,}) : super(key: key);
+  final String title;
   @override
-  State<StatefulWidget> createState() {
-    return _MaterialControlsState();
-  }
+  State<StatefulWidget> createState() => _MaterialControlsState();
 }
 
 class _MaterialControlsState extends State<MaterialControls> {
@@ -30,15 +31,15 @@ class _MaterialControlsState extends State<MaterialControls> {
   final marginSize = 5.0;
 
   VideoPlayerController controller;
-  VideosPlayerController chewieController;
+  YepController yepController;
 
   @override
   Widget build(BuildContext context) {
     if (_latestValue.hasError) {
-      return chewieController.errorBuilder != null
-          ? chewieController.errorBuilder(
+      return yepController.errorBuilder != null
+          ? yepController.errorBuilder(
               context,
-              chewieController.videoPlayerController.value.errorDescription,
+              yepController.videoPlayerController.value.errorDescription,
             )
           : Center(
               child: Icon(
@@ -59,6 +60,7 @@ class _MaterialControlsState extends State<MaterialControls> {
           absorbing: _hideStuff,
           child: Column(
             children: <Widget>[
+              yepController.isFullScreen ? _buildHeader(context, widget.title) : new Container(),
               _latestValue != null &&
                           !_latestValue.isPlaying &&
                           _latestValue.duration == null ||
@@ -92,11 +94,11 @@ class _MaterialControlsState extends State<MaterialControls> {
 
   @override
   void didChangeDependencies() {
-    final _oldController = chewieController;
-    chewieController = VideosPlayerController.of(context);
-    controller = chewieController.videoPlayerController;
+    final _oldController = yepController;
+    yepController = YepController.of(context);
+    controller = yepController.videoPlayerController;
 
-    if (_oldController != chewieController) {
+    if (_oldController != yepController) {
       _dispose();
       _initialize();
     }
@@ -104,6 +106,33 @@ class _MaterialControlsState extends State<MaterialControls> {
     super.didChangeDependencies();
   }
 
+  AnimatedOpacity _buildHeader(BuildContext context, String title) {
+    return new AnimatedOpacity(
+      opacity: _hideStuff ? 0.0 : 1.0,
+      duration: new Duration(milliseconds: 300),
+      child: new Container(
+        color: darkColor,
+        height: barHeight,
+        child: new Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            new IconButton(
+              onPressed: _onExpandCollapse,
+              color: lightColor,
+              icon: new Icon(Icons.chevron_left),
+            ),
+            new Text(
+              '$title',
+              style: new TextStyle(
+                color: lightColor,
+                fontSize: 18.0,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
   AnimatedOpacity _buildBottomBar(
     BuildContext context,
   ) {
@@ -114,18 +143,19 @@ class _MaterialControlsState extends State<MaterialControls> {
       duration: Duration(milliseconds: 300),
       child: Container(
         height: barHeight,
-        color: Theme.of(context).dialogBackgroundColor,
+//        color: Theme.of(context).dialogBackgroundColor,
+        color: darkColor,
         child: Row(
           children: <Widget>[
             _buildPlayPause(controller),
-            chewieController.isLive
+            yepController.isLive
                 ? Expanded(child: const Text('LIVE'))
                 : _buildPosition(iconColor),
-            chewieController.isLive ? const SizedBox() : _buildProgressBar(),
-            chewieController.allowMuting
+            yepController.isLive ? const SizedBox() : _buildProgressBar(),
+            yepController.allowMuting
                 ? _buildMuteButton(controller)
                 : Container(),
-            chewieController.allowFullScreen
+            yepController.allowFullScreen
                 ? _buildExpandButton()
                 : Container(),
           ],
@@ -149,9 +179,10 @@ class _MaterialControlsState extends State<MaterialControls> {
           ),
           child: Center(
             child: Icon(
-              chewieController.isFullScreen
+              yepController.isFullScreen
                   ? Icons.fullscreen_exit
                   : Icons.fullscreen,
+              color: lightColor,
             ),
           ),
         ),
@@ -190,12 +221,13 @@ class _MaterialControlsState extends State<MaterialControls> {
               child: GestureDetector(
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).dialogBackgroundColor,
+//                    color: Theme.of(context).dialogBackgroundColor,
+                    color: Colors.black54,
                     borderRadius: BorderRadius.circular(48.0),
                   ),
                   child: Padding(
                     padding: EdgeInsets.all(12.0),
-                    child: Icon(Icons.play_arrow, size: 32.0),
+                    child: Icon(Icons.play_arrow, size: 32.0, color: lightColor,),
                   ),
                 ),
               ),
@@ -235,6 +267,7 @@ class _MaterialControlsState extends State<MaterialControls> {
                 (_latestValue != null && _latestValue.volume > 0)
                     ? Icons.volume_up
                     : Icons.volume_off,
+                color: lightColor,
               ),
             ),
           ),
@@ -256,6 +289,7 @@ class _MaterialControlsState extends State<MaterialControls> {
         ),
         child: Icon(
           controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+          color: lightColor,
         ),
       ),
     );
@@ -275,6 +309,7 @@ class _MaterialControlsState extends State<MaterialControls> {
         '${formatDuration(position)} / ${formatDuration(duration)}',
         style: TextStyle(
           fontSize: 14.0,
+          color: lightColor,
         ),
       ),
     );
@@ -296,11 +331,11 @@ class _MaterialControlsState extends State<MaterialControls> {
     _updateState();
 
     if ((controller.value != null && controller.value.isPlaying) ||
-        chewieController.autoPlay) {
+        yepController.autoPlay) {
       _startHideTimer();
     }
 
-    if (chewieController.showControlsOnInitialize) {
+    if (yepController.showControlsOnInitialize) {
       _initTimer = Timer(Duration(milliseconds: 200), () {
         setState(() {
           _hideStuff = false;
@@ -313,7 +348,7 @@ class _MaterialControlsState extends State<MaterialControls> {
     setState(() {
       _hideStuff = true;
 
-      chewieController.toggleFullScreen();
+      yepController.toggleFullScreen();
       _showAfterExpandCollapseTimer = Timer(Duration(milliseconds: 300), () {
         setState(() {
           _cancelAndRestartTimer();
@@ -381,12 +416,17 @@ class _MaterialControlsState extends State<MaterialControls> {
 
             _startHideTimer();
           },
-          colors: chewieController.materialProgressColors ??
-              VideosPlayerProgressColors(
-                  playedColor: Theme.of(context).accentColor,
-                  handleColor: Theme.of(context).accentColor,
-                  bufferedColor: Theme.of(context).backgroundColor,
-                  backgroundColor: Theme.of(context).disabledColor),
+          colors: yepController.materialProgressColors ??
+              YepProgressColors(
+//                  playedColor: Theme.of(context).accentColor,
+//                  handleColor: Theme.of(context).accentColor,
+//                  bufferedColor: Theme.of(context).backgroundColor,
+//                  backgroundColor: Theme.of(context).disabledColor,
+                  playedColor: lightColor,
+                  handleColor: lightColor,
+                  bufferedColor: Colors.white30,
+                  backgroundColor: darkColor,
+              ),
         ),
       ),
     );
