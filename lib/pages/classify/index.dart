@@ -15,6 +15,7 @@
 
 import 'package:netease_cloud_classroom/widgets/videos_player/index.dart';
 import 'package:netease_cloud_classroom/widgets/videos_player/player.dart';
+import 'package:netease_cloud_classroom/constant/index.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
@@ -37,10 +38,10 @@ class _ClassifyState extends State<Classify> {
     _videoPlayerController2 = VideoPlayerController.network('http://mpvideo.qpic.cn/0b78vmaagaaavianwojzbjpvbk6daovqaaya.f10002.mp4?dis_k=3cf4b4ed07e1f1a6b498784932b7149b&dis_t=1598501478');
     _yepController = YepController(
       videoPlayerController: _videoPlayerController1,
-      aspectRatio: 5 / 3,
+//      aspectRatio: 4 / 3,
       autoPlay: true,
       looping: true,
-      // Try playing around with some of these other options:
+      // Try playing around with some of   other options:
 
       // showControls: false,
       // materialProgressColors: VideosPlayerProgressColors(

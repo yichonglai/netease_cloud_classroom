@@ -71,14 +71,14 @@ class _YepState extends State<Yep> {
   Widget build(BuildContext context) {
     return _YepControllerProvider(
       controller: widget.controller,
-      child: PlayerWithControls(title: widget.title,),
+      child: PlayerWithControls(
+        title: widget.title,
+      ),
     );
   }
 
-  Widget _buildFullScreenVideo(
-      BuildContext context,
-      Animation<double> animation,
-      _YepControllerProvider controllerProvider) {
+  Widget _buildFullScreenVideo(BuildContext context,
+      Animation<double> animation, _YepControllerProvider controllerProvider) {
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: Container(
@@ -191,7 +191,7 @@ class YepController extends ChangeNotifier {
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ],
-    this.routePageBuilder = null,
+    this.routePageBuilder,
   }) : assert(videoPlayerController != null,
             'You must provide a controller to play a video') {
     _initialize();
@@ -272,11 +272,9 @@ class YepController extends ChangeNotifier {
   final YepRoutePageBuilder routePageBuilder;
 
   static YepController of(BuildContext context) {
-    final chewieControllerProvider =
-        context.inheritFromWidgetOfExactType(_YepControllerProvider)
-            as _YepControllerProvider;
-
-    return chewieControllerProvider.controller;
+    final yepControllerProvider =
+        context.dependOnInheritedWidgetOfExactType<_YepControllerProvider>();
+    return yepControllerProvider.controller;
   }
 
   bool _isFullScreen = false;

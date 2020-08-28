@@ -6,7 +6,7 @@ import 'package:transparent_image/transparent_image.dart';
 import './type.dart';
 import './course_panel.dart';
 import './course_list.dart';
-import 'package:netease_cloud_classroom/pages/browser/index.dart';
+import 'package:netease_cloud_classroom/router.dart';
 
 class Course extends StatefulWidget {
   @override
@@ -58,13 +58,7 @@ class _CourseState extends State<Course> {
                   itemBuilder: (BuildContext context, int idx) {
                     return InkWell(
                       onTap: () {
-                        Navigator.of(context)
-                            .push(new MaterialPageRoute(builder: (_) {
-                          return new Browser(
-                            url: data.result.focusDtoList[idx].targetTo,
-                            title: data.result.focusDtoList[idx].name,
-                          );
-                        }));
+                        Navigator.pushNamed(context, Router.browser, arguments: data.result.focusDtoList[idx].targetTo);
                       },
                       child: FadeInImage.memoryNetwork(
                         placeholder: kTransparentImage,
