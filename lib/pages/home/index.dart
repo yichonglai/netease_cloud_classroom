@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../widgets/static_search_widget.dart';
+import '../../widgets/search_input.dart';
 import './individual/index.dart';
 import './course/index.dart';
 import './micro_specialty/index.dart';
+import 'package:netease_cloud_classroom/router.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -27,11 +28,15 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
               child: Column(
                 children: <Widget>[
                   Expanded(child: SizedBox()),
-                  StaticSearchWidget(
+                  SearchInput(
                     hintText: '网易云课堂',
                     margin: EdgeInsets.fromLTRB(
                         14, 0, 14, 0),
-                    onTab: () => {print('搜索')},
+                    disabled: true,
+                    onTab: (){
+                      print('------------======================');
+                      Navigator.pushNamed(context, Router.searchPage);
+                    },
                   ),
                   TabBar(
                     indicatorWeight: 2.0,

@@ -1,13 +1,20 @@
 import 'package:flutter/material.dart';
+import './type.dart';
 import './pages/splash/index.dart';
 import './pages/browser/index.dart';
+import './pages/search/index.dart';
 
 Map<String, Widget Function(BuildContext)> routes = {
   Router.homePage: (BuildContext context) => Splash(),
-  Router.browser: (BuildContext context) => Browser((ModalRoute.of(context).settings.arguments as dynamic).url, title: (ModalRoute.of(context).settings.arguments as dynamic).title,),
+  Router.searchPage: (BuildContext context) => Search(),
+  Router.browser: (BuildContext context) {
+    final BrowserParamsType params = ModalRoute.of(context).settings.arguments;
+    return Browser(params.url, title:params.title);
+  },
 };
 class Router {
   static const homePage = 'app://';
+  static const searchPage = 'app://search';
   static const browser = 'app://browser';
 
 

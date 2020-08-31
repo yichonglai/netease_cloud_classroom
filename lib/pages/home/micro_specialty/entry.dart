@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:netease_cloud_classroom/constant/index.dart';
+import 'package:netease_cloud_classroom/router.dart';
+import 'package:netease_cloud_classroom/type.dart';
 
 class Entry extends StatelessWidget {
   @override
@@ -70,7 +72,12 @@ class Entry extends StatelessWidget {
                   width: 160,
                   child: FlatButton(
                     onPressed: () {
-                      print('66666');
+                      Navigator.pushNamed(
+                        context,
+                        Router.browser,
+                        arguments: BrowserParamsType(
+                            url: 'https://m.study.163.com/smartSpec/intro.htm'),
+                      );
                     },
                     color: Color.fromRGBO(54, 133, 198, 1),
                     child: Row(

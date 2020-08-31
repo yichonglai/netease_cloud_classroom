@@ -2,18 +2,17 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import './widgets/restart_widget.dart';
-import './pages/splash/index.dart';
 import './router.dart';
 
 void main() {
   runApp(MyApp());
-  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.dark);
   if (Platform.isAndroid) {
     //设置Android头部的导航栏透明
-//    SystemUiOverlayStyle systemUiOverlayStyle =
-//        SystemUiOverlayStyle(statusBarColor: Colors.transparent);
-//    SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+    SystemUiOverlayStyle systemUiOverlayStyle =
+        SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+    SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
   }
+//  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 }
 
 class MyApp extends StatelessWidget {
@@ -29,7 +28,7 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         routes: routes,
-        home: Splash(),
+        initialRoute: Router.homePage,
 //         debugShowCheckedModeBanner: false,
       ),
     );

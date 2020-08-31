@@ -10,13 +10,9 @@ class Browser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(title),
-      ),
-      body: WebView(
-        initialUrl: url,
-        javascriptMode: JavascriptMode.unrestricted,
-      ),
+      appBar: title != null ? AppBar(title: Text(title)) : null,
+      body:
+          WebView(initialUrl: url, javascriptMode: JavascriptMode.unrestricted),
     );
   }
 }

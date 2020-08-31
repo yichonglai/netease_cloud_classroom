@@ -7,6 +7,7 @@ import './type.dart';
 import './course_panel.dart';
 import './course_list.dart';
 import 'package:netease_cloud_classroom/router.dart';
+import 'package:netease_cloud_classroom/type.dart';
 
 class Course extends StatefulWidget {
   @override
@@ -58,7 +59,8 @@ class _CourseState extends State<Course> {
                   itemBuilder: (BuildContext context, int idx) {
                     return InkWell(
                       onTap: () {
-                        Navigator.pushNamed(context, Router.browser, arguments: data.result.focusDtoList[idx].targetTo);
+                        final BrowserParamsType params = BrowserParamsType(url: data.result.focusDtoList[idx].targetTo, title: data.result.focusDtoList[idx].name);
+                        Navigator.pushNamed(context, Router.browser, arguments: params);
                       },
                       child: FadeInImage.memoryNetwork(
                         placeholder: kTransparentImage,
