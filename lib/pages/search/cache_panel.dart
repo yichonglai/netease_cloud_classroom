@@ -53,14 +53,15 @@ class CachePanel extends StatelessWidget {
         .map(
           (e) => Container(
             margin: EdgeInsets.only(right: 7, bottom: 10),
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(
+                    width: 1, color: Color.fromRGBO(153, 164, 189, 1))),
             child: InkWell(
               onTap: (){},
+              borderRadius: BorderRadius.circular(15),
               child: Container(
-                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(
-                        width: 1, color: Color.fromRGBO(153, 164, 189, 1))),
+                padding: EdgeInsets.symmetric(vertical: 5, horizontal: 15),
                 child: Text(
                   e,
                   style: TextStyle(

@@ -23,7 +23,12 @@ class _SearchState extends State<Search> {
                 bottom: 10,
               ),
             ),
-            CachePanel(title: '搜索历史', onCancel: (){},data: ['系统', '运营', '深度', '线性', '学习', '3dmax'])
+            CachePanel(
+                title: '搜索历史',
+                onCancel: () {},
+                data: ['系统', '运营', '深度', '线性', '学习', '3dmax']),
+            CachePanel(
+                title: '热门搜索', data: ['系统', '运营', '深度', '线性', '学习', '3dmax'])
           ],
         ));
   }
