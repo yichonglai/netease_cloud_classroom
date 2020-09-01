@@ -66,7 +66,7 @@ class _AdsState extends State<Ads> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Image.asset(
-                        Constant.ASSETS_IMG + 'logo1.webp',
+                        Constant.ASSETS_IMG + 'logo.jpg',
                         width: ScreenUtils.screenW(context) / 3,
                       ),
                       Padding(
