@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import './type.dart';
 import '../home/index.dart';
-import '../classify/index.dart';
+import '../category/index.dart';
 import '../myStudy/index.dart';
 import '../account/index.dart';
 
@@ -12,7 +12,7 @@ class BottomNav extends StatefulWidget {
 
 class _BottomNavState extends State<BottomNav> {
   int _currentIndex = 0;
-  final List<Widget> _pages = [Home(), Classify(), MyStudy(), Account()];
+  final List<Widget> _pages = [Home(), Category(), MyStudy(), Account()];
   final List<BottomNavType> _list = [
     BottomNavType(title: '首页', icon: Icons.home),
     BottomNavType(title: '分类', icon: Icons.subject),

@@ -26,9 +26,9 @@ class _SearchState extends State<Search> {
             CachePanel(
                 title: '搜索历史',
                 onCancel: () {},
-                data: ['系统', '运营', '深度', '线性', '学习', '3dmax']),
+                data: ['前端', 'flutter',]),
             CachePanel(
-                title: '热门搜索', data: ['系统', '运营', '深度', '线性', '学习', '3dmax'])
+                title: '热门搜索', data: ['资深前端架构师', '汇编语言', '深度学习', '线性', '学习', '3dmax'])
           ],
         ));
   }
