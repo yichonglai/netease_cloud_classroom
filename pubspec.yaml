@@ -36,6 +36,7 @@ dependencies:
   video_player: ^0.10.12
   wakelock: ^0.1.4+2
   open_iconic_flutter: ^0.3.0
+  pull_to_refresh: ^1.6.0
 
 dev_dependencies:
   flutter_test:
