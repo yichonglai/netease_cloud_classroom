@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import './item.dart';
+import './type.dart';
+import 'item.dart';
 
 class Account extends StatelessWidget {
   @override
@@ -23,47 +25,26 @@ class Account extends StatelessWidget {
               ),
             ),
           ),
-          _divider(5),
-          Item(
-            title: '消息中心',
-            icon: Icons.mail_outline,
-            onTab: () => {print('消息中心')},
-          ),
-          _divider(10),
-          Item(
-            title: '个人资料',
-            icon: Icons.person_outline,
-            underline: true,
-            onTab: () => {print('个人资料')},
-          ),
-          Item(title: '学习兴趣', icon: Icons.school,onTab: () => {print('学习兴趣')},),
-          _divider(10),
-          Item(
-            title: '我的余额',
-            icon: Icons.monetization_on,
-            underline: true,
-            onTab: () => {print('我的余额')},
-          ),
-          Item(title: '我的订单', icon: Icons.fiber_dvr,onTab: () => {print('我的订单')},),
-          _divider(10),
-          Item(title: '设置', icon: Icons.settings,onTab: () => {print('设置')},),
-          _divider(10),
-          Item(
-            title: '意见反馈',
-            icon: Icons.message,
-            underline: true,
-            onTab: () => {print('意见反馈')},
-          ),
-          Item(title: '给网易云课堂评价', icon: Icons.edit,onTab: () => {print('给网易云课堂评价')},),
+          ...list.map((e) => Item(
+            title: e.title,
+            icon: e.icon,
+            onTab: e.onTab,
+            desc: e.desc,
+            underline: e.underline,
+            marginTop: e.marginTop,
+          )).toList(),
         ],
       ),
     );
   }
+  final List<ListType> list = [
+    ListType(title: '消息中心', icon: Icons.mail_outline, marginTop: 5),
+    ListType(title: '个人资料', icon: Icons.person_outline, marginTop: 10, underline: true),
+    ListType(title: '学习兴趣', icon: Icons.school),
+    ListType(title: '我的余额', icon: Icons.monetization_on, marginTop: 10, underline: true),
+    ListType(title: '我的订单', icon: Icons.fiber_dvr),
+    ListType(title: '设置', icon: Icons.settings, marginTop: 10),
+    ListType(title: '意见反馈', icon: Icons.message, marginTop: 10, underline: true),
+    ListType(title: '给网易云课堂评价', icon: Icons.edit),
+  ];
 }
-
-SliverToBoxAdapter _divider(double height) => SliverToBoxAdapter(
-      child: Divider(
-        height: height,
-        color: Colors.transparent,
-      ),
-    );

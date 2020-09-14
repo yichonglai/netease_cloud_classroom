@@ -37,6 +37,7 @@ dependencies:
   wakelock: ^0.1.4+2
   open_iconic_flutter: ^0.3.0
   pull_to_refresh: ^1.6.0
+  provider: ^4.3.2+2
 
 dev_dependencies:
   flutter_test:

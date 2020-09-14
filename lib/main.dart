@@ -3,9 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import './widgets/restart_widget.dart';
 import './router.dart';
+import './provider/index.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(ProviderWidget(child: MyApp(),));
   if (Platform.isAndroid) {
     //设置Android头部的导航栏透明
     SystemUiOverlayStyle systemUiOverlayStyle =
