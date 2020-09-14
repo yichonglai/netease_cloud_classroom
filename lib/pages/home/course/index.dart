@@ -33,7 +33,7 @@ class _CourseState extends State<Course> {
       onRefresh: fetchData,
       child: CustomScrollView(
         slivers: <Widget>[
-          data?.focusDtoList != null ? SliverToBoxAdapter(
+          (data?.focusDtoList != null && data?.focusDtoList?.length != 0) ? SliverToBoxAdapter(
             child: SizedBox(
               height: 137,
               child: Swiper(
