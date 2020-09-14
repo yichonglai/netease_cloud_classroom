@@ -4,6 +4,7 @@ import './individual/index.dart';
 import './course/index.dart';
 import './micro_specialty/index.dart';
 import 'package:netease_cloud_classroom/router.dart';
+const _COLOR_THEME = const Color.fromRGBO(51, 177, 123, 1);
 
 class Home extends StatefulWidget {
   @override
@@ -41,8 +42,8 @@ class _HomeState extends State<Home> with SingleTickerProviderStateMixin {
                   TabBar(
                     indicatorWeight: 2.0,
                     indicatorSize: TabBarIndicatorSize.label,
-                    indicatorColor: Color.fromRGBO(51, 177, 123, 1),
-                    labelColor: Color.fromRGBO(51, 177, 123, 1),
+                    indicatorColor: _COLOR_THEME,
+                    labelColor: _COLOR_THEME,
                     labelStyle: TextStyle(fontSize: 14),
                     unselectedLabelColor: Color.fromRGBO(80, 80, 80, 1),
                     tabs: tabs.map((t) {
