@@ -11,6 +11,7 @@ import './course_panel.dart';
 import './course_list.dart';
 
 const _COLOR_THEME = const Color.fromRGBO(51, 177, 123, 1);
+
 class Course extends StatefulWidget {
   @override
   _CourseState createState() => _CourseState();
@@ -19,8 +20,7 @@ class Course extends StatefulWidget {
 class _CourseState extends State<Course> {
   Result data;
   bool isLoading = false;
-  RefreshController _refreshController =
-      RefreshController(initialRefresh: true);
+  RefreshController _refreshController = RefreshController(initialRefresh: true);
 
   @override
   void initState() {
@@ -29,40 +29,6 @@ class _CourseState extends State<Course> {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< HEAD
-    return SmartRefresher(
-      enablePullDown: true,
-      controller: _refreshController,
-      onRefresh: fetchData,
-      child: CustomScrollView(
-        slivers: <Widget>[
-          (data?.focusDtoList != null && data?.focusDtoList?.length != 0) ? SliverToBoxAdapter(
-            child: SizedBox(
-              height: 137,
-              child: Swiper(
-                itemHeight: 137,
-                itemCount: data.focusDtoList.length,
-                autoplay: true,
-                pagination: SwiperPagination(
-                  builder: DotSwiperPaginationBuilder(
-                    color: Color.fromRGBO(200, 200, 200, 0.5),
-                    size: 6.0,
-                    activeSize: 8.0,
-                  ),
-                ),
-                itemBuilder: (BuildContext context, int idx) {
-                  return InkWell(
-                    onTap: () {
-                      final BrowserParamsType params = BrowserParamsType(
-                          url: data.focusDtoList[idx].targetTo,
-                          title: data.focusDtoList[idx].name);
-                      Navigator.pushNamed(
-                          context, Router.browser, arguments: params);
-                    },
-                    child: FadeInImage.memoryNetwork(
-                      placeholder: kTransparentImage,
-                      image: data.focusDtoList[idx].photoUrl,
-=======
     return Theme(
       data: ThemeData(primaryColor: _COLOR_THEME),
       child: SmartRefresher(
@@ -71,91 +37,86 @@ class _CourseState extends State<Course> {
         onRefresh: fetchData,
         child: CustomScrollView(
           slivers: <Widget>[
-            data?.focusDtoList != null
-                ? SliverToBoxAdapter(
-                    child: SizedBox(
->>>>>>> 7ab6ed3b21a8915907b2903a9717f0e6b2413160
-                      height: 137,
-                      child: Swiper(
-                        itemHeight: 137,
-                        itemCount: data.focusDtoList.length,
-                        autoplay: true,
-                        pagination: SwiperPagination(
-                          builder: DotSwiperPaginationBuilder(
-                            color: Color.fromRGBO(200, 200, 200, 0.5),
-                            size: 6.0,
-                            activeSize: 8.0,
-                          ),
-                        ),
-                        itemBuilder: (BuildContext context, int idx) {
-                          return InkWell(
-                            onTap: () {
-                              final BrowserParamsType params =
-                                  BrowserParamsType(
-                                      url: data.focusDtoList[idx].targetTo,
-                                      title: data.focusDtoList[idx].name);
-                              Navigator.pushNamed(context, Router.browser,
-                                  arguments: params);
-                            },
-                            child: FadeInImage.memoryNetwork(
+            (data?.focusDtoList != null && data?.focusDtoList?.length != 0) ? SliverToBoxAdapter(
+              child: SizedBox(
+                height: 137,
+                child: Swiper(
+                  itemHeight: 137,
+                  itemCount: data.focusDtoList.length,
+                  autoplay: true,
+                  pagination: SwiperPagination(
+                    builder: DotSwiperPaginationBuilder(
+                      color: Color.fromRGBO(200, 200, 200, 0.5),
+                      size: 6.0,
+                      activeSize: 8.0,
+                    ),
+                  ),
+                  itemBuilder: (BuildContext context, int idx) {
+                    return InkWell(
+                      onTap: () {
+                        final BrowserParamsType params = BrowserParamsType(
+                            url: data.focusDtoList[idx].targetTo,
+                            title: data.focusDtoList[idx].name);
+                        Navigator.pushNamed(
+                            context, Router.browser, arguments: params);
+                      },
+                      child: FadeInImage.memoryNetwork(
+                        placeholder: kTransparentImage,
+                        image: data.focusDtoList[idx].photoUrl,
+                        height: 137,
+                        fit: BoxFit.cover,
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ) : SliverToBoxAdapter(child: SizedBox()),
+            data?.iconDtoList != null ? SliverToBoxAdapter(
+              child: Container(
+                color: Colors.white,
+                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 9),
+                child: GridView.count(
+                  physics: NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  crossAxisCount: 4,
+                  childAspectRatio: 1.4,
+                  mainAxisSpacing: 5.0,
+                  children: <Widget>[
+                    ...data.iconDtoList
+                        .map((item) =>
+                        Column(
+                          children: <Widget>[
+                            FadeInImage.memoryNetwork(
                               placeholder: kTransparentImage,
-                              image: data.focusDtoList[idx].photoUrl,
-                              height: 137,
-                              fit: BoxFit.cover,
+                              image: item.photoUrl,
+                              width: 37.98,
+                              height: 37.98,
                             ),
-                          );
-                        },
-                      ),
-                    ),
-                  )
-                : SliverToBoxAdapter(child: SizedBox()),
-            data?.iconDtoList != null
-                ? SliverToBoxAdapter(
-                    child: Container(
-                      color: Colors.white,
-                      padding:
-                          EdgeInsets.symmetric(vertical: 15, horizontal: 9),
-                      child: GridView.count(
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        crossAxisCount: 4,
-                        childAspectRatio: 1.4,
-                        mainAxisSpacing: 5.0,
-                        children: <Widget>[
-                          ...data.iconDtoList
-                              .map((item) => Column(
-                                    children: <Widget>[
-                                      FadeInImage.memoryNetwork(
-                                        placeholder: kTransparentImage,
-                                        image: item.photoUrl,
-                                        width: 37.98,
-                                        height: 37.98,
-                                      ),
-                                      SizedBox(
-                                        height: 3,
-                                      ),
-                                      Text(
-                                        item.name,
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: Color.fromRGBO(0, 0, 0, 1)),
-                                      ),
-                                    ],
-                                  ))
-                              .toList(),
-                        ],
-                      ),
-                    ),
-                  )
-                : SliverToBoxAdapter(child: SizedBox()),
+                            SizedBox(
+                              height: 3,
+                            ),
+                            Text(
+                              item.name,
+                              style: TextStyle(
+                                  fontSize: 12,
+                                  color: Color.fromRGBO(0, 0, 0, 1)),
+                            ),
+                          ],
+                        ))
+                        .toList(),
+                  ],
+                ),
+              ),
+            ) : SliverToBoxAdapter(child: SizedBox()),
             ...(data?.sectionDtoList ?? [])
-                .map((item) => CoursePanel(
-                      title: item.sectionName,
-                      child: CourseList(
-                        listType: item.sectionTemplate,
-                        data: item.elementDtoList,
-                      ),
-                    ))
+                .map((item) =>
+                CoursePanel(
+                  title: item.sectionName,
+                  child: CourseList(
+                    listType: item.sectionTemplate,
+                    data: item.elementDtoList,
+                  ),
+                ))
                 .toList(),
           ],
         ),
