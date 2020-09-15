@@ -17,18 +17,16 @@ class Course extends StatefulWidget {
   _CourseState createState() => _CourseState();
 }
 
-class _CourseState extends State<Course> {
+class _CourseState extends State<Course> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
   Result data;
   bool isLoading = false;
   RefreshController _refreshController = RefreshController(initialRefresh: true);
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Theme(
       data: ThemeData(primaryColor: _COLOR_THEME),
       child: SmartRefresher(

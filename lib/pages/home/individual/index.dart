@@ -9,9 +9,13 @@ class Individual extends StatefulWidget {
   _IndividualState createState() => _IndividualState();
 }
 
-class _IndividualState extends State<Individual> {
+class _IndividualState extends State<Individual> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scrollbar(
       child: ListView(
         children: <Widget>[

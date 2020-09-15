@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 
-
 class Item extends StatelessWidget {
-  Item({Key key, this.title, this.icon, this.onTab, this.underline = false, this.desc = '', this.marginTop = 0})
+  Item(
+      {Key key,
+      this.title,
+      this.icon,
+      this.onTab,
+      this.underline = false,
+      this.desc,
+      this.marginTop = 0})
       : super(key: key);
   final String title;
   final IconData icon;
@@ -36,18 +42,19 @@ class Item extends StatelessWidget {
                     child: Text(
                       title,
                       style: TextStyle(
-                          fontSize: 14.0,
-                          color: Color.fromRGBO(80, 80, 80, 1)),
+                          fontSize: 14.0, color: Color.fromRGBO(80, 80, 80, 1)),
                     ),
                   ),
-//                  Text(desc, style: TextStyle(),),
+                  Text(desc ?? '', style: TextStyle(color: Colors.grey, fontSize: 12),),
                   Icon(
                     Icons.chevron_right,
                     color: Color.fromARGB(255, 166, 166, 166),
                   )
                 ],
               ),
-              SizedBox(height: 11,),
+              SizedBox(
+                height: 11,
+              ),
               Offstage(
                 offstage: !underline,
                 child: Container(
@@ -64,8 +71,8 @@ class Item extends StatelessWidget {
 }
 
 SliverToBoxAdapter divider(double height) => SliverToBoxAdapter(
-  child: Divider(
-    height: height,
-    color: Colors.transparent,
-  ),
-);
+      child: Divider(
+        height: height,
+        color: Colors.transparent,
+      ),
+    );
