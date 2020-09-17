@@ -4,7 +4,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import './http_error.dart';
-import 'package:flutter_common_utils/log_util.dart';
+import './log_util.dart';
 
 /// http请求成功回调
 typedef SuccessCallback<T> = void Function(dynamic data);
@@ -79,122 +79,116 @@ class HttpManager {
   }
 
   ///Get网络请求
-  ///
-  ///[url] 网络请求地址不包含域名
-  ///[params] url请求参数支持restful
-  ///[options] 请求配置
-  ///[successCallback] 请求成功回调
-  ///[errorCallback] 请求失败回调
-  ///[tag] 请求统一标识，用于取消网络请求
   void get({
     @required String url,
-    Map<String, dynamic> params,
+    Map<String, dynamic> queryParameters,
     Options options,
     SuccessCallback successCallback,
     FailureCallback errorCallback,
-    @required String tag,
+    @required String requestTag,
   }) async {
     _request(
       url: url,
-      params: params,
+      queryParameters: queryParameters,
       method: GET,
       successCallback: successCallback,
       errorCallback: errorCallback,
-      tag: tag,
+      requestTag: requestTag,
     );
   }
 
-  ///post网络请求
-  ///
-  ///[url] 网络请求地址不包含域名
-  ///[data] post 请求参数
-  ///[params] url请求参数支持restful
-  ///[options] 请求配置
-  ///[successCallback] 请求成功回调
-  ///[errorCallback] 请求失败回调
-  ///[tag] 请求统一标识，用于取消网络请求
+  /// post网络请求
   void post({
     @required String url,
-    data,
-    Map<String, dynamic> params,
+    dynamic data,
+    Map<String, dynamic> queryParameters,
     Options options,
     SuccessCallback successCallback,
     FailureCallback errorCallback,
-    @required String tag,
+    @required String requestTag,
   }) async {
     _request(
       url: url,
       data: data,
       method: POST,
-      params: params,
+      queryParameters: queryParameters,
       successCallback: successCallback,
       errorCallback: errorCallback,
-      tag: tag,
+      requestTag: requestTag,
     );
   }
 
-  ///统一网络请求
-  ///
-  ///[url] 网络请求地址不包含域名
-  ///[data] post 请求参数
-  ///[params] url请求参数支持restful
-  ///[options] 请求配置
-  ///[successCallback] 请求成功回调
-  ///[errorCallback] 请求失败回调
-  ///[tag] 请求统一标识，用于取消网络请求
+  // ignore: slash_for_doc_comments
+  /**
+   * 统一同步网络请求
+   * 
+   * [url] 网络请求地址不包含域名
+   * 
+   * [data] post 请求参数
+   * 
+   * [queryParameters] query参数
+   * 
+   * [options] 请求配置
+   * 
+   * [successCallback] 请求成功回调
+   * 
+   * [errorCallback] 请求失败回调
+   * 
+   * [requestTag] 请求统一标识，用于取消网络请求
+    */
   void _request({
     @required String url,
     String method,
-    data,
-    Map<String, dynamic> params,
+    dynamic data,
+    Map<String, dynamic> queryParameters,
     Options options,
     SuccessCallback successCallback,
     FailureCallback errorCallback,
-    @required String tag,
+    @required String requestTag,
   }) async {
     // 检查网络是否连接
     ConnectivityResult connectivityResult =
         await (Connectivity().checkConnectivity());
     if (connectivityResult == ConnectivityResult.none) {
-      if (errorCallback != null) errorCallback(HttpError(HttpError.NETWORK_ERROR, "网络异常，请稍后重试！"));
+      if (errorCallback != null)
+        errorCallback(HttpError(HttpError.NETWORK_ERROR, "网络异常，请稍后重试！"));
       LogUtil.v("请求网络异常，请稍后重试！");
       return;
     }
 
-    //设置默认值
-    params = params ?? {};
+    // 设置默认值
+    queryParameters = queryParameters ?? {};
     method = method ?? 'GET';
-
     options?.method = method;
-
     options = options ??
         Options(
           method: method,
         );
 
-    url = _restfulUrl(url, params);
-
     try {
       CancelToken cancelToken;
-      if (tag != null) {
-        cancelToken =
-            _cancelTokens[tag] == null ? CancelToken() : _cancelTokens[tag];
-        _cancelTokens[tag] = cancelToken;
+      if (requestTag != null) {
+        cancelToken = _cancelTokens[requestTag] == null
+            ? CancelToken()
+            : _cancelTokens[requestTag];
+        _cancelTokens[requestTag] = cancelToken;
       }
 
-      Response<Map<String, dynamic>> response = await _client.request(url,
-          data: data,
-          queryParameters: params,
-          options: options,
-          cancelToken: cancelToken);
+      Response<Map<String, dynamic>> response = await _client.request(
+        url,
+        data: data,
+        queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
+      );
       String statusCode = response.data["statusCode"];
       if (statusCode == "0") {
-        //成功
+        // 成功
         if (successCallback != null) {
           successCallback(response.data["data"]);
         }
       } else {
-        //失败
+        // 失败
         String message = response.data["statusDesc"];
         LogUtil.v("请求服务器出错：$message");
         if (errorCallback != null) {
@@ -211,6 +205,83 @@ class HttpManager {
       if (errorCallback != null) {
         errorCallback(HttpError(HttpError.UNKNOWN, "网络异常，请稍后重试！"));
       }
+    }
+  }
+
+  ///统一网络请求
+  ///
+  ///[url] 网络请求地址不包含域名
+  ///
+  ///[data] post 请求参数
+  ///
+  ///[queryParameters]
+  ///
+  ///[options] 请求配置
+  ///
+  ///[requestTag] 请求统一标识，用于取消网络请求
+  Future<T> _requestAsync<T>({
+    @required String url,
+    String method,
+    dynamic data,
+    Map<String, dynamic> queryParameters,
+    Options options,
+    JsonParse<T> jsonParse,
+    @required String requestTag,
+  }) async {
+    //检查网络是否连接
+    ConnectivityResult connectivityResult =
+        await (Connectivity().checkConnectivity());
+    if (connectivityResult == ConnectivityResult.none) {
+      LogUtil.v("请求网络异常，请稍后重试！");
+      throw (HttpError(HttpError.NETWORK_ERROR, "网络异常，请稍后重试！"));
+    }
+
+    //设置默认值
+    queryParameters = queryParameters ?? {};
+    method = method ?? 'GET';
+    options?.method = method;
+    options = options ??
+        Options(
+          method: method,
+        );
+
+    try {
+      CancelToken cancelToken;
+      if (requestTag != null) {
+        cancelToken = _cancelTokens[requestTag] == null
+            ? CancelToken()
+            : _cancelTokens[requestTag];
+        _cancelTokens[requestTag] = cancelToken;
+      }
+
+      Response<Map<String, dynamic>> response = await _client.request(
+        url,
+        queryParameters: queryParameters,
+        data: data,
+        options: options,
+        cancelToken: cancelToken,
+      );
+      String statusCode = response.data["statusCode"];
+      if (statusCode == "0") {
+        //成功
+        if (jsonParse != null) {
+          return jsonParse(response.data["data"]);
+        } else {
+          return response.data["data"];
+        }
+      } else {
+        //失败
+        String message = response.data["statusDesc"];
+        LogUtil.v("请求服务器出错：$message");
+        //只能用 Future，外层有 try catch
+        return Future.error((HttpError(statusCode, message)));
+      }
+    } on DioError catch (e, s) {
+      LogUtil.v("请求出错：$e\n$s");
+      throw (HttpError.dioError(e));
+    } catch (e, s) {
+      LogUtil.v("未知异常出错：$e\n$s");
+      throw (HttpError(HttpError.UNKNOWN, "网络异常，请稍后重试！"));
     }
   }
 
@@ -423,80 +494,6 @@ class HttpManager {
     );
   }
 
-  ///统一网络请求
-  ///
-  ///[url] 网络请求地址不包含域名
-  ///[data] post 请求参数
-  ///[params] url请求参数支持restful
-  ///[options] 请求配置
-  ///[tag] 请求统一标识，用于取消网络请求
-  Future<T> _requestAsync<T>({
-    @required String url,
-    String method,
-    data,
-    Map<String, dynamic> params,
-    Options options,
-    JsonParse<T> jsonParse,
-    @required String tag,
-  }) async {
-    //检查网络是否连接
-    ConnectivityResult connectivityResult =
-        await (Connectivity().checkConnectivity());
-    if (connectivityResult == ConnectivityResult.none) {
-      LogUtil.v("请求网络异常，请稍后重试！");
-      throw (HttpError(HttpError.NETWORK_ERROR, "网络异常，请稍后重试！"));
-    }
-
-    //设置默认值
-    params = params ?? {};
-    method = method ?? 'GET';
-
-    options?.method = method;
-
-    options = options ??
-        Options(
-          method: method,
-        );
-
-    url = _restfulUrl(url, params);
-
-    try {
-      CancelToken cancelToken;
-      if (tag != null) {
-        cancelToken =
-            _cancelTokens[tag] == null ? CancelToken() : _cancelTokens[tag];
-        _cancelTokens[tag] = cancelToken;
-      }
-
-      Response<Map<String, dynamic>> response = await _client.request(url,
-          queryParameters: params,
-          data: data,
-          options: options,
-          cancelToken: cancelToken);
-      String statusCode = response.data["statusCode"];
-      if (statusCode == "0") {
-        //成功
-        if (jsonParse != null) {
-          return jsonParse(response.data["data"]);
-        } else {
-          return response.data["data"];
-        }
-      } else {
-        //失败
-        String message = response.data["statusDesc"];
-        LogUtil.v("请求服务器出错：$message");
-        //只能用 Future，外层有 try catch
-        return Future.error((HttpError(statusCode, message)));
-      }
-    } on DioError catch (e, s) {
-      LogUtil.v("请求出错：$e\n$s");
-      throw (HttpError.dioError(e));
-    } catch (e, s) {
-      LogUtil.v("未知异常出错：$e\n$s");
-      throw (HttpError(HttpError.UNKNOWN, "网络异常，请稍后重试！"));
-    }
-  }
-
   ///异步下载文件
   ///
   ///[url] 下载地址
@@ -642,11 +639,11 @@ class HttpManager {
     }
   }
 
-  ///restful处理
+  /// restful处理
   String _restfulUrl(String url, Map<String, dynamic> params) {
     // restful 请求处理
-    // /gysw/search/hist/:user_id        user_id=27
-    // 最终生成 url 为     /gysw/search/hist/27
+    // /api/search/hist/:user_id        user_id=27
+    // 最终生成 url 为     /api/search/hist/27
     params.forEach((key, value) {
       if (url.indexOf(key) != -1) {
         url = url.replaceAll(':$key', value.toString());
