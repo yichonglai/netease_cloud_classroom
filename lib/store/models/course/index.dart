@@ -26,6 +26,7 @@ class CourseModel with ChangeNotifier, DiagnosticableTreeMixin {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
+    // TODO: devtool字段映射
     // properties.add(FlagProperty('isFetching', value: true, showName: true));
   }
 }
