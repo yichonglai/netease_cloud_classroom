@@ -4,6 +4,8 @@ import '../home/index.dart';
 import '../category/index.dart';
 import '../myStudy/index.dart';
 import '../account/index.dart';
+import 'package:netease_cloud_classroom/http/dio.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class BottomNav extends StatefulWidget {
   @override
@@ -20,10 +22,24 @@ class _BottomNavState extends State<BottomNav> {
     BottomNavType(title: '账号', icon: Icons.person),
   ];
 
-  void onTabTapped(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
+  void onTabTapped(int index) async {
+    Fluttertoast.showToast(
+        msg: "Toast提示信息",
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 10,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
+    final res =
+        await Http().get(url: '/user/checkLoginStatus').catchError((e) => {
+          print(e.message)
+        });
+    print('1=======');
+    print(res);
+//    setState(() {
+//      _currentIndex = index;
+//    });
   }
 
   @override

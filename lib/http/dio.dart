@@ -7,7 +7,7 @@ import './http_error.dart';
 
 typedef void SuccessCallback<T>(T data);
 typedef void FailureCallback(HttpError data);
-const String _BASE_URL = 'http://clauseyi.top/';
+const String _BASE_URL = 'http://localhost:3001/api';
 const int _CONNECT_TIMEOUT = 5000;
 const int _RECEIVE_TIMEOUT = 5000;
 
@@ -73,7 +73,7 @@ class Http {
   /// ### [options] : 请求配置
   /// ### [successCallback] : 请求成功回调
   /// ### [failureCallback] : 请求失败回调
- Future<T> _request<T>({
+  Future<T> _request<T>({
     @required String url,
     String requestTag,
     String method,
@@ -103,15 +103,13 @@ class Http {
             requestTag == null ? null : generateCancelToken(requestTag),
         options: options ?? Options(method: method ?? 'GET'),
       );
-      String statusCode = res.data["statusCode"];
-      if (statusCode == "0") {
+      if (res.data['success']) {
         if (successCallback != null) {
-          successCallback(res.data['data']);
+          successCallback(res.data);
         }
-        return res.data['data'];
+        return res.data as T;
       } else {
-        String message = res.data["statusDesc"];
-        error = HttpError(statusCode, message);
+        error = HttpError(res.data['code'], res.data['message']);
         //只能用 Future，外层有 try catch
         if (failureCallback != null) {
           failureCallback(error);
@@ -136,12 +134,57 @@ class Http {
     }
   }
 
+  /// get请求
+  Future<T> get<T>({
+    @required String url,
+    String requestTag,
+    dynamic data,
+    Map<String, dynamic> queryParameters,
+    Options options,
+    SuccessCallback successCallback,
+    FailureCallback failureCallback,
+  }) async {
+    return _request<T>(
+      url: url,
+      requestTag: requestTag,
+      method: 'GET',
+      data: data,
+      queryParameters: queryParameters,
+      options: options,
+      successCallback: successCallback,
+      failureCallback: failureCallback
+    );
+  }
+
+  /// get请求
+  Future<T> post<T>({
+    @required String url,
+    String requestTag,
+    dynamic data,
+    Map<String, dynamic> queryParameters,
+    Options options,
+    SuccessCallback successCallback,
+    FailureCallback failureCallback,
+  }) async {
+    return _request<T>(
+        url: url,
+        requestTag: requestTag,
+        method: 'POST',
+        data: data,
+        queryParameters: queryParameters,
+        options: options,
+        successCallback: successCallback,
+        failureCallback: failureCallback
+    );
+  }
+
+
   /// 检查网络状态
   Future<bool> isNetworkConnected() async {
     ConnectivityResult result = await Connectivity()
         .checkConnectivity()
-        .catchError(() => ConnectivityResult.none);
-    return result == ConnectivityResult.none;
+        .catchError((e) => ConnectivityResult.none);
+    return result != ConnectivityResult.none;
   }
 
   // 生成cancelToken
