@@ -92,7 +92,6 @@ class Http {
       }
       throw error;
     }
-
     try {
       options?.method = method ?? 'GET';
       Response<Map<String, dynamic>> res = await _dio.request(

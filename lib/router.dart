@@ -3,20 +3,23 @@ import './type.dart';
 import './pages/splash/index.dart';
 import './pages/browser/index.dart';
 import './pages/search/index.dart';
+import './pages/login/index.dart';
 
 Map<String, Widget Function(BuildContext)> routes = {
+  Router.login: (BuildContext context) => Login(),
   Router.homePage: (BuildContext context) => Splash(),
   Router.searchPage: (BuildContext context) => Search(),
   Router.browser: (BuildContext context) {
     final BrowserParamsType params = ModalRoute.of(context).settings.arguments;
-    return Browser(params.url, title:params.title);
+    return Browser(params.url, title: params.title);
   },
 };
+
 class Router {
   static const homePage = 'app://';
   static const searchPage = 'app://search';
   static const browser = 'app://browser';
-
+  static const login = 'app://login';
 
 //  Router.pushNoParams(BuildContext context, String url) {
 //    Navigator.push(context, MaterialPageRoute(builder: (context) {

@@ -6,7 +6,9 @@ import './router.dart';
 import './store/index.dart';
 
 void main() {
-  runApp(Store(child: MyApp(),));
+  runApp(Store(
+    child: MyApp(),
+  ));
   if (Platform.isAndroid) {
     //设置Android头部的导航栏透明
     SystemUiOverlayStyle systemUiOverlayStyle =
@@ -29,7 +31,8 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         routes: routes,
-        initialRoute: Router.homePage,
+        // initialRoute: Router.homePage,
+        initialRoute: Router.login,
 //         debugShowCheckedModeBanner: false,
       ),
     );

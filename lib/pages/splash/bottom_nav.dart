@@ -23,23 +23,30 @@ class _BottomNavState extends State<BottomNav> {
   ];
 
   void onTabTapped(int index) async {
-    Fluttertoast.showToast(
-        msg: "Toast提示信息",
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 10,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-        fontSize: 16.0
-    );
-    final res =
-        await Http().get(url: '/user/checkLoginStatus').catchError((e) => {
-          print(e.message)
-        });
-    print('1=======');
-    print(res);
-//    setState(() {
-//      _currentIndex = index;
-//    });
+    try {
+      if (index > 1) {
+        // 判断是否登录
+        await Http().get(url: '/user/checkLoginStatus');
+      }
+      setState(() {
+        _currentIndex = index;
+      });
+    } catch (e) {
+      // 未登录
+      if (e.code == 'FAIL_USER_NO_LOGIN') {
+        Fluttertoast.showToast(
+          msg: '请先登录！',
+          gravity: ToastGravity.CENTER,
+          textColor: Colors.red,
+        );
+      } else {
+        Fluttertoast.showToast(
+          msg: e.message,
+          gravity: ToastGravity.CENTER,
+          textColor: Colors.red,
+        );
+      }
+    }
   }
 
   @override
