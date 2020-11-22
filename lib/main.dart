@@ -31,8 +31,8 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         routes: routes,
-        // initialRoute: Router.homePage,
-        initialRoute: Router.login,
+        initialRoute: Router.homePage,
+//        initialRoute: Router.login,
 //         debugShowCheckedModeBanner: false,
       ),
     );

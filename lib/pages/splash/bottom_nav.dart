@@ -6,6 +6,7 @@ import '../myStudy/index.dart';
 import '../account/index.dart';
 import 'package:netease_cloud_classroom/http/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:netease_cloud_classroom/router.dart';
 
 class BottomNav extends StatefulWidget {
   @override
@@ -26,7 +27,7 @@ class _BottomNavState extends State<BottomNav> {
     try {
       if (index > 1) {
         // 判断是否登录
-        await Http().get(url: '/user/checkLoginStatus');
+        await Http().post(url: '/user/getUserInfo', data: {"token": "yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6Im1pbGlfaGUiLCJ1c2VySWQiOjQsImlhdCI6MTYwNTk0NDM5NywiZXhwIjoxNjA2MDMwNzk3fQ.leE-4xv9fgplj_BimImiEhaVeGWqVNRx6-6i5hReJms"});
       }
       setState(() {
         _currentIndex = index;
@@ -34,11 +35,7 @@ class _BottomNavState extends State<BottomNav> {
     } catch (e) {
       // 未登录
       if (e.code == 'FAIL_USER_NO_LOGIN') {
-        Fluttertoast.showToast(
-          msg: '请先登录！',
-          gravity: ToastGravity.CENTER,
-          textColor: Colors.red,
-        );
+        Navigator.pushNamed(context, Router.login);
       } else {
         Fluttertoast.showToast(
           msg: e.message,

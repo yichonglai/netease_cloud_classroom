@@ -131,6 +131,8 @@ class _CourseState extends State<Course> with AutomaticKeepAliveClientMixin {
       Response res = await Dio().post(
           'https://m.study.163.com/j/operation/homepage.json',
           options: Options(responseType: ResponseType.plain));
+      print('@@@@@@@@@@@@@@@@@@@');
+      print(res.data.toString());
       if (!mounted) return;
       setState(() {
         isLoading = false;

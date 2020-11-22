@@ -1,12 +1,14 @@
 import 'dart:io';
+import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:connectivity/connectivity.dart';
 import './http_error.dart';
+import './type.dart';
 
-typedef void SuccessCallback<T>(T data);
-typedef void FailureCallback(HttpError data);
+typedef void SuccessCallback<T>(T body);
+typedef void FailureCallback(HttpError error);
 const String _BASE_URL = 'http://localhost:3001/api';
 const int _CONNECT_TIMEOUT = 5000;
 const int _RECEIVE_TIMEOUT = 5000;
@@ -73,14 +75,14 @@ class Http {
   /// ### [options] : 请求配置
   /// ### [successCallback] : 请求成功回调
   /// ### [failureCallback] : 请求失败回调
-  Future<T> _request<T>({
+  Future<BaseBodyType<T>> _request<T>({
     @required String url,
     String requestTag,
     String method,
     dynamic data,
     Map<String, dynamic> queryParameters,
     Options options,
-    SuccessCallback successCallback,
+    SuccessCallback<BaseBodyType<T>> successCallback,
     FailureCallback failureCallback,
   }) async {
     HttpError error;
@@ -94,53 +96,67 @@ class Http {
     }
     try {
       options?.method = method ?? 'GET';
-      Response<Map<String, dynamic>> res = await _dio.request(
+      options?.responseType = ResponseType.plain;
+      Response res = await _dio.request(
         url,
         data: data,
         queryParameters: queryParameters ?? {},
         cancelToken:
             requestTag == null ? null : generateCancelToken(requestTag),
-        options: options ?? Options(method: method ?? 'GET'),
+        options: options ?? Options(method: method ?? 'GET', responseType: ResponseType.plain),
       );
-      if (res.data['success']) {
-        if (successCallback != null) {
-          successCallback(res.data);
-        }
-        return res.data as T;
-      } else {
-        error = HttpError(res.data['code'], res.data['message']);
-        //只能用 Future，外层有 try catch
-        if (failureCallback != null) {
-          failureCallback(error);
-          return null;
-        }
-        return Future.error(error);
-      }
+      print('///////////////////');
+      print(res.data is String);
+      print(json.decode(res.data.toString()));
+      // BaseBodyType<T>
+      final BaseBodyType<T> responseBody = json.decode(res.data.toString()) as BaseBodyType<T>;
+      print(responseBody.success);
+
+//      if (responseBody.success) {
+//        print('9999999999');
+//        if (successCallback != null) {
+//          successCallback(responseBody);
+//        }
+//        return responseBody;
+//      } else {
+//        print(443434343434);
+//        error = HttpError(responseBody.code, responseBody.message);
+//        //只能用 Future，外层有 try catch
+//        if (failureCallback != null) {
+//          failureCallback(error);
+//          return null;
+//        }
+//        return Future.error(error);
+//      }
     } on DioError catch (e) {
       error = HttpError.dioError(e);
       if (failureCallback != null) {
         failureCallback(error);
         return null;
       }
+      print('DioError-error');
+      print(e);
       throw error;
     } catch (e) {
-      error = HttpError(HttpError.UNKNOWN, '网络异常，请稍后重试！');
+      error = HttpError(HttpError.UNKNOWN, e.message?? '网络异常，请稍后重试！');
       if (failureCallback != null) {
         failureCallback(error);
         return null;
       }
+      print('UNKNOWN-error');
+      print(e);
       throw error;
     }
   }
 
   /// get请求
-  Future<T> get<T>({
+  Future<BaseBodyType<T>> get<T>({
     @required String url,
     String requestTag,
     dynamic data,
     Map<String, dynamic> queryParameters,
     Options options,
-    SuccessCallback successCallback,
+    SuccessCallback<BaseBodyType<T>> successCallback,
     FailureCallback failureCallback,
   }) async {
     return _request<T>(
@@ -155,14 +171,14 @@ class Http {
     );
   }
 
-  /// get请求
-  Future<T> post<T>({
+  /// post请求
+  Future<BaseBodyType<T>> post<T>({
     @required String url,
     String requestTag,
     dynamic data,
     Map<String, dynamic> queryParameters,
     Options options,
-    SuccessCallback successCallback,
+    SuccessCallback<BaseBodyType<T>> successCallback,
     FailureCallback failureCallback,
   }) async {
     return _request<T>(
