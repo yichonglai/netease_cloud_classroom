@@ -5,6 +5,8 @@ import 'package:netease_cloud_classroom/http/type.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:netease_cloud_classroom/router.dart';
 import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+import './type.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -77,16 +79,15 @@ class _LoginState extends State<Login> {
       _formKey.currentState.save();
       try {
         final res = await Http().post(url: '/user/signIn', data: {"userName": _username, "password": _password, "jwt": true});
-        // 类型定义
-        print('*&%^#@@@#%%^^%');
-        print(res);
-//        print(json.decode(res));
-//        Navigator.pushNamed(context, Router.homePage);
+        final String token = Token.fromJson(res.data).token;
+        final prefs = await SharedPreferences.getInstance();
+        final setTokenResult = await prefs.setString('user_token', token);
+        if (setTokenResult) {
+          Navigator.pushNamed(context, Router.homePage);
+        }
       } catch(e) {
-        print('55555555555555555');
-        print(e);
         Fluttertoast.showToast(
-          msg: e.message?? '999999',
+          msg: e.message,
           gravity: ToastGravity.CENTER,
           textColor: Colors.red,
         );
