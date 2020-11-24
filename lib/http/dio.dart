@@ -8,7 +8,7 @@ import './type.dart';
 
 typedef void SuccessCallback<BaseBody>(BaseBody body);
 typedef void FailureCallback(HttpError error);
-const String _BASE_URL = 'http://localhost:3001/api';
+const String _BASE_URL = 'http://192.168.21.47:3001/api';
 const int _CONNECT_TIMEOUT = 5000;
 const int _RECEIVE_TIMEOUT = 5000;
 
@@ -67,7 +67,7 @@ class Http {
 
   /// ## 统一网络请求
   /// ### [url] : 网络请求地址
-  /// ### [requestTag] : 请求统一标识(cancelToken)，用于取消网络请求
+  /// ### [cancelTokenKey] : 请求统一标识(cancelToken)，用于取消网络请求
   /// ### [method] : 请求方法
   /// ### [data] : post等 请求参数
   /// ### [queryParameters] : query
@@ -76,7 +76,7 @@ class Http {
   /// ### [failureCallback] : 请求失败回调
   Future<BaseBody> _request({
     @required String url,
-    String requestTag,
+    String cancelTokenKey,
     String method,
     dynamic data,
     Map<String, dynamic> queryParameters,
@@ -100,7 +100,7 @@ class Http {
         data: data,
         queryParameters: queryParameters ?? {},
         cancelToken:
-            requestTag == null ? null : generateCancelToken(requestTag),
+            cancelTokenKey == null ? null : generateCancelToken(cancelTokenKey),
         options: options ?? Options(method: method ?? 'GET'),
       );
       final BaseBody body = BaseBody.fromJson(res.data);
@@ -128,7 +128,7 @@ class Http {
       print(e);
       throw error;
     } catch (e) {
-      error = HttpError(HttpError.UNKNOWN, e.message?? '网络异常，请稍后重试！');
+      error = HttpError(HttpError.UNKNOWN, e.message ?? '网络异常，请稍后重试！');
       if (failureCallback != null) {
         failureCallback(error);
         return null;
@@ -142,7 +142,7 @@ class Http {
   /// get请求
   Future<BaseBody> get({
     @required String url,
-    String requestTag,
+    String cancelTokenKey,
     dynamic data,
     Map<String, dynamic> queryParameters,
     Options options,
@@ -151,7 +151,7 @@ class Http {
   }) async {
     return _request(
       url: url,
-      requestTag: requestTag,
+      cancelTokenKey: cancelTokenKey,
       method: 'GET',
       data: data,
       queryParameters: queryParameters,
@@ -164,7 +164,7 @@ class Http {
   /// post请求
   Future<BaseBody> post({
     @required String url,
-    String requestTag,
+    String cancelTokenKey,
     dynamic data,
     Map<String, dynamic> queryParameters,
     Options options,
@@ -173,7 +173,7 @@ class Http {
   }) async {
     return _request(
         url: url,
-        requestTag: requestTag,
+        cancelTokenKey: cancelTokenKey,
         method: 'POST',
         data: data,
         queryParameters: queryParameters,
@@ -192,12 +192,12 @@ class Http {
     return result != ConnectivityResult.none;
   }
 
-  // 生成cancelToken
-  CancelToken generateCancelToken(String requestTag) {
-    final cancelToken = _cancelTokens[requestTag] == null
+  /// 生成cancelToken
+  CancelToken generateCancelToken(String cancelTokenKey) {
+    final cancelToken = _cancelTokens[cancelTokenKey] == null
         ? CancelToken()
-        : _cancelTokens[requestTag];
-    _cancelTokens[requestTag] = cancelToken;
+        : _cancelTokens[cancelTokenKey];
+    _cancelTokens[cancelTokenKey] = cancelToken;
     return cancelToken;
   }
 }

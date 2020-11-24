@@ -83,7 +83,7 @@ class _LoginState extends State<Login> {
         final prefs = await SharedPreferences.getInstance();
         final setTokenResult = await prefs.setString('user_token', token);
         if (setTokenResult) {
-          Navigator.pushNamed(context, Router.homePage);
+          Navigator.pushReplacementNamed(context, Router.homePage);
         }
       } catch(e) {
         Fluttertoast.showToast(
@@ -131,7 +131,7 @@ class _LoginState extends State<Login> {
                       TextFormField(
                         controller: _userNameController,
                         focusNode: _focusNodeUserName,
-                        keyboardType: TextInputType.number,
+                        // keyboardType: TextInputType.number,
                         autofocus: true,
                         decoration: InputDecoration(
                           labelText: "用户名",
