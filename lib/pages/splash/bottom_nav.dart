@@ -29,7 +29,7 @@ class _BottomNavState extends State<BottomNav> {
       if (index > 1) {
         final prefs = await SharedPreferences.getInstance();
         final String token = prefs.getString('user_token');
-        await Http().post(url: '/user/getUserInfo', data: {"token": token});
+        await Http().post(url: '/user/checkLogin', data: {"token": token});
       }
       setState(() {
         _currentIndex = index;

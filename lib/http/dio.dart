@@ -8,7 +8,7 @@ import './type.dart';
 
 typedef void SuccessCallback<BaseBody>(BaseBody body);
 typedef void FailureCallback(HttpError error);
-const String _BASE_URL = 'http://192.168.21.47:3001/api';
+const String _BASE_URL = 'http://localhost:3001/api';
 const int _CONNECT_TIMEOUT = 5000;
 const int _RECEIVE_TIMEOUT = 5000;
 
