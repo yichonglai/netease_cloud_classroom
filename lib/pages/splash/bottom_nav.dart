@@ -7,6 +7,7 @@ import '../account/index.dart';
 import 'package:netease_cloud_classroom/http/dio.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:netease_cloud_classroom/router.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class BottomNav extends StatefulWidget {
   @override
@@ -26,8 +27,9 @@ class _BottomNavState extends State<BottomNav> {
   void onTabTapped(int index) async {
     try {
       if (index > 1) {
-        // 判断是否登录
-        await Http().post(url: '/user/getUserInfo', data: {"token": "yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6Im1pbGlfaGUiLCJ1c2VySWQiOjQsImlhdCI6MTYwNTk0NDM5NywiZXhwIjoxNjA2MDMwNzk3fQ.leE-4xv9fgplj_BimImiEhaVeGWqVNRx6-6i5hReJms"});
+        final prefs = await SharedPreferences.getInstance();
+        final String token = prefs.getString('user_token');
+        await Http().post(url: '/user/getUserInfo', data: {"token": token});
       }
       setState(() {
         _currentIndex = index;

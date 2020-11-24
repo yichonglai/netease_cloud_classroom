@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,7 +6,7 @@ import 'package:connectivity/connectivity.dart';
 import './http_error.dart';
 import './type.dart';
 
-typedef void SuccessCallback<T>(T body);
+typedef void SuccessCallback<BaseBody>(BaseBody body);
 typedef void FailureCallback(HttpError error);
 const String _BASE_URL = 'http://localhost:3001/api';
 const int _CONNECT_TIMEOUT = 5000;
@@ -75,14 +74,14 @@ class Http {
   /// ### [options] : 请求配置
   /// ### [successCallback] : 请求成功回调
   /// ### [failureCallback] : 请求失败回调
-  Future<BaseBodyType<T>> _request<T>({
+  Future<BaseBody> _request({
     @required String url,
     String requestTag,
     String method,
     dynamic data,
     Map<String, dynamic> queryParameters,
     Options options,
-    SuccessCallback<BaseBodyType<T>> successCallback,
+    SuccessCallback<BaseBody> successCallback,
     FailureCallback failureCallback,
   }) async {
     HttpError error;
@@ -96,38 +95,29 @@ class Http {
     }
     try {
       options?.method = method ?? 'GET';
-      options?.responseType = ResponseType.plain;
       Response res = await _dio.request(
         url,
         data: data,
         queryParameters: queryParameters ?? {},
         cancelToken:
             requestTag == null ? null : generateCancelToken(requestTag),
-        options: options ?? Options(method: method ?? 'GET', responseType: ResponseType.plain),
+        options: options ?? Options(method: method ?? 'GET'),
       );
-      print('///////////////////');
-      print(res.data is String);
-      print(json.decode(res.data.toString()));
-      // BaseBodyType<T>
-      final BaseBodyType<T> responseBody = json.decode(res.data.toString()) as BaseBodyType<T>;
-      print(responseBody.success);
-
-//      if (responseBody.success) {
-//        print('9999999999');
-//        if (successCallback != null) {
-//          successCallback(responseBody);
-//        }
-//        return responseBody;
-//      } else {
-//        print(443434343434);
-//        error = HttpError(responseBody.code, responseBody.message);
-//        //只能用 Future，外层有 try catch
-//        if (failureCallback != null) {
-//          failureCallback(error);
-//          return null;
-//        }
-//        return Future.error(error);
-//      }
+      final BaseBody body = BaseBody.fromJson(res.data);
+      if (body.success) {
+        if (successCallback != null) {
+          successCallback(body);
+        }
+        return body;
+      } else {
+        error = HttpError(body.code, body.message);
+        //只能用 Future，外层有 try catch
+        if (failureCallback != null) {
+          failureCallback(error);
+          return null;
+        }
+        return Future.error(error);
+      }
     } on DioError catch (e) {
       error = HttpError.dioError(e);
       if (failureCallback != null) {
@@ -150,16 +140,16 @@ class Http {
   }
 
   /// get请求
-  Future<BaseBodyType<T>> get<T>({
+  Future<BaseBody> get({
     @required String url,
     String requestTag,
     dynamic data,
     Map<String, dynamic> queryParameters,
     Options options,
-    SuccessCallback<BaseBodyType<T>> successCallback,
+    SuccessCallback<BaseBody> successCallback,
     FailureCallback failureCallback,
   }) async {
-    return _request<T>(
+    return _request(
       url: url,
       requestTag: requestTag,
       method: 'GET',
@@ -172,16 +162,16 @@ class Http {
   }
 
   /// post请求
-  Future<BaseBodyType<T>> post<T>({
+  Future<BaseBody> post({
     @required String url,
     String requestTag,
     dynamic data,
     Map<String, dynamic> queryParameters,
     Options options,
-    SuccessCallback<BaseBodyType<T>> successCallback,
+    SuccessCallback<BaseBody> successCallback,
     FailureCallback failureCallback,
   }) async {
-    return _request<T>(
+    return _request(
         url: url,
         requestTag: requestTag,
         method: 'POST',

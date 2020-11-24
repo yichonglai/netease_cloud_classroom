@@ -1,9 +1,22 @@
-import 'package:flutter/material.dart';
+import 'dart:convert';
 
-class BaseBodyType<T> {
-  BaseBodyType({this.success = false, this.message = '', this.data, this.code = '',});
+class BaseBody {
+  BaseBody({this.success = false, this.message = '', this.data, this.code = '',});
   final bool success;
   final String message;
-  final T data;
+  final dynamic data;
   final String code;
+
+  factory BaseBody.fromJson(Map<String, dynamic> json) => BaseBody(
+    success: json["success"],
+    code: json["code"],
+    message: json["message"],
+    data: json["data"],
+  );
+  Map<String, dynamic> toJson() => {
+    "success": success,
+    "code": code,
+    "message": message,
+    "data": data,
+  };
 }
